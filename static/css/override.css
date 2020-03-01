@@ -1,0 +1,72 @@
+.navbar{
+  padding-left:15%;
+  padding-right:15%;
+  background-color: #f5f5f5;
+  min-height: 120px;
+}
+
+#bg-home{
+  overflow:hidden;
+  display:block;
+  width:100%;
+  padding-bottom: 400px;
+  background-image: url("../images/bg-home.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  }
+
+#finder-box{
+  background-color: #f5f5f5;
+  position: absolute;
+  top: 340px;
+  width: 40%;
+  margin: 0 auto;
+}
+
+#filter-box{
+  width: 60%;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#event-card-box{
+  width: 60%;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+#signup-login-form{
+  width: 15%;
+  padding-top: 50px;
+}
+
+/*
+    Override primary button colours to match colour scheme
+*/
+.btn-primary {
+    color: #fff;
+    background-color: #364f6b;
+    border-color: #364f6b;
+  }
+  
+  .btn-primary:hover {
+    color: #fff;
+    background-color: #3fc1c9;
+    border-color: #3fc1c9;
+  }
+  
+  .btn-primary:focus, .btn-primary.focus {
+    color: #fff;
+    background-color: #3fc1c9;
+    border-color: #3fc1c9;
+    box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
+  }
+  
+  .btn-primary.disabled, .btn-primary:disabled {
+    color: #fff;
+    background-color: #3fc1c9;
+    border-color: #3fc1c9;
+  }
