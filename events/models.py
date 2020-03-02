@@ -14,7 +14,7 @@ class Category(models.Model):
 
 
 
-          
+       #comment   
 class Event(models.Model):
     EventsID = models.AutoField(primary_key=True)
     UserID = models.ForeignKey(User, on_delete=models.CASCADE)
