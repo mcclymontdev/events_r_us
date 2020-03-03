@@ -89,6 +89,8 @@ DATABASES = {
     }
 }
 
+# Setting up django-registration
+AUTH_USER_MODEL = 'events.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators

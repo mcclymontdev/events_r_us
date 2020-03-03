@@ -4,6 +4,8 @@ import django
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 
+from django.contrib.auth.models import AbstractUser, PermissionsMixin
+from django.conf import settings
 
 # Create your models here.
 class Category(models.Model):
@@ -17,7 +19,7 @@ class Category(models.Model):
        #comment   
 class Event(models.Model):
     EventsID = models.AutoField(primary_key=True)
-    UserID = models.ForeignKey(User, on_delete=models.CASCADE)
+    UserID = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     EventName = models.CharField(max_length=100)
     Description = models.CharField(max_length=500)
     Picture = models.ImageField(blank=True)
@@ -29,19 +31,27 @@ class Event(models.Model):
         return self.EventName
         
 
-class User(models.Model):
-    user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
-    UserID = models.AutoField(primary_key=True)
-    Username = models.CharField(max_length=30)
-    Picture = models.ImageField(upload_to='profile_image', blank=True)
-    password = models.CharField(max_length=30, blank=True)
-    def __str__(self):
-        return self.Username
+# class User(models.Model):
+#     user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
+#     UserID = models.AutoField(primary_key=True)
+#     Username = models.CharField(max_length=30)
+#     Picture = models.ImageField(upload_to='profile_image', blank=True)
+#     password = models.CharField(max_length=30, blank=True)
+#     def __str__(self):
+#         return self.Username
+
+class User(AbstractUser):
+    picture = models.ImageField(upload_to='profile_image', blank=True)
+
+    location = models.CharField(max_length=90)
+
+    # TODO: Fetch this from map API from location
+    # location_coords =
         
 class Comment(models.Model):
     CommentID = models.AutoField(primary_key=True)
     EventID = models.ForeignKey(Event, on_delete=models.CASCADE)
-    UserID = models.ForeignKey(User, on_delete=models.CASCADE)
+    UserID = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     Comment = models.CharField(max_length=200)
     #ParentCommentID = models.ForeignKey(Comments, on_delete=models.CASCADE)
     def __str__(self):
