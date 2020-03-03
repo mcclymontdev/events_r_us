@@ -17,10 +17,17 @@ from django.contrib import admin
 from django.urls import path
 from django.urls import include
 
+from events.forms import signUpForm
+from django_registration.backends.one_step.views import RegistrationView
+from events.views import signup
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('events.urls')),
     #Test
-    path('accounts/', include('django_registration.backends.activation.urls')),
+    path('accounts/register/',
+        signup.as_view(form_class=signUpForm,success_url='/profile/'),
+        name='django_registration_register'),
+    path('accounts/', include('django_registration.backends.one_step.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
 ]

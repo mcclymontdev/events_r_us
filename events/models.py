@@ -47,7 +47,7 @@ class User(AbstractUser):
 
     # TODO: Fetch this from map API from location
     # location_coords =
-        
+
 class Comment(models.Model):
     CommentID = models.AutoField(primary_key=True)
     EventID = models.ForeignKey(Event, on_delete=models.CASCADE)

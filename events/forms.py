@@ -6,6 +6,8 @@ class signUpForm(RegistrationForm):
     class Meta(RegistrationForm.Meta):
         model = User
         fields = [
+            "first_name",
+            "last_name",
             User.USERNAME_FIELD,
             User.get_email_field_name(),
             "password1",
