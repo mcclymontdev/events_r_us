@@ -43,6 +43,8 @@ class Event(models.Model):
 class User(AbstractUser):
     picture = models.ImageField(upload_to='profile_image', blank=True)
 
+    email = None
+
     location = models.CharField(max_length=90)
 
     # TODO: Fetch this from map API from location
