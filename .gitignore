@@ -1,3 +1,9 @@
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.vscode/settings.json
 Thumbs.db
 Thumbs.db:encryptable
 ehthumbs.db
@@ -43,11 +49,6 @@ var/
 wheels/
 pip-wheel-metadata/
 share/python-wheels/
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
 *.egg-info/
 .installed.cfg
 *.egg
