@@ -1,27 +1,15 @@
-from django_registration.forms import UserCreationForm
-from django_registration import validators
+from django_registration.forms import RegistrationForm
 
 from events.models import User
 
-class signUpForm(UserCreationForm):
-    class Meta(UserCreationForm.Meta):
+class signUpForm(RegistrationForm):
+    class Meta(RegistrationForm.Meta):
+        model = User
         fields = [
             User.USERNAME_FIELD,
+            User.get_email_field_name(),
             "password1",
             "password2",
+            "picture",
+            "location",
         ]
-
-    error_css_class = "error"
-    required_css_class = "required"
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if hasattr(self, "reserved_names"):
-            reserved_names = self.reserved_names
-        else:
-            reserved_names = validators.DEFAULT_RESERVED_NAMES
-        username_validators = [
-            validators.ReservedNameValidator(reserved_names),
-            validators.validate_confusables,
-        ]
-        self.fields[User.USERNAME_FIELD].validators.extend(username_validators)
