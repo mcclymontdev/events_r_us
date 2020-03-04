@@ -40,13 +40,22 @@ class Event(models.Model):
 #     def __str__(self):
 #         return self.Username
 
-class User(AbstractUser):
+# class User(AbstractUser):
+#     picture = models.ImageField(upload_to='profile_image', blank=True)
+
+#     location = models.CharField(max_length=90, blank=True)
+
+#     # TODO: Fetch this from map API from location
+#     # location_coords =
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
     picture = models.ImageField(upload_to='profile_image', blank=True)
+    location = models.CharField(max_length=60, blank=True)
 
-    location = models.CharField(max_length=90, blank=True)
-
-    # TODO: Fetch this from map API from location
-    # location_coords =
+    def __str__(self):
+        return self.user.Username
 
 class Comment(models.Model):
     CommentID = models.AutoField(primary_key=True)

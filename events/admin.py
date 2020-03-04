@@ -7,4 +7,4 @@ from .models import User
 admin.site.register(Category)
 admin.site.register(Event)
 admin.site.register(Comment) 
-admin.site.register(User, UserAdmin)
+#admin.site.register(User)
