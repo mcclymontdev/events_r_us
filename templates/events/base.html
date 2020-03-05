@@ -36,16 +36,21 @@
 				<!--
 					TODO: Make authenticated user navbar links
 				-->
-
-                <li class="nav-item">
+				{% if user.is_authenticated %}
+				<li class="nav-item">
+                    <a href="/events/account" class="nav-link m-2">Account</a>
+                </li>
+				<li class="nav-item">
+                    <a href="{% url 'events:logout' %}" class="nav-link m-2">Sign Out</a>
+                </li>
+				{% else %}
+				<li class="nav-item">
                     <a href="/events/login" class="nav-link m-2">Log in</a>
                 </li>
                 <li class="nav-item">
                     <a href="/events/sign-up" class="nav-link m-2">Sign up</a>
                 </li>
-				<li class="nav-item">
-                    <a href="/events/account" class="nav-link m-2">Account</a>
-                </li>
+				{% endif %}
 
             </ul>
         </div>
