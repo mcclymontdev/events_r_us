@@ -25,6 +25,7 @@ from django_registration.backends.one_step.views import RegistrationView
 
 urlpatterns = [
     path('', include('events.urls')),
+    path('events/', include('events.urls')),
     path('admin/', admin.site.urls),
     path('accounts/', include('django_registration.backends.one_step.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
