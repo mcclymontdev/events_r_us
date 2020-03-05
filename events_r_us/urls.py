@@ -18,6 +18,7 @@ from django.urls import path
 from django.urls import include
 from django.conf import settings
 from django.conf.urls.static import static
+from events import views
 
 
 from django_registration.backends.one_step.views import RegistrationView
