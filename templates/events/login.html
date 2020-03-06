@@ -8,7 +8,7 @@
 {% block body_block %}
     <!-- Login form -->
     <div class="d-flex justify-content-center">
-      <form id="signup-login-form">
+      <form id="signup-login-form" method = "post" action = ".">
 	  	{% csrf_token %}
         <div class="form-group">
           <label for="username">Username</label>
