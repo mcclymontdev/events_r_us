@@ -15,20 +15,24 @@ class Category(models.Model):
         return self.Name
 
 class Event(models.Model):
+    NAME_MAX_LENGTH = 100
+    DESCRIPTION_MAX_LENGTH = 500
+    ADDRESS_MAX_LENGTH = 100
+
     EventID = models.AutoField(primary_key=True)
     UserID = models.ForeignKey(User, on_delete=models.CASCADE)
-    EventName = models.CharField(max_length=100)
-    Description = models.CharField(max_length=500)
+    EventName = models.CharField(max_length=EVENTNAME_MAX_LENGTH)
+    Description = models.CharField(max_length=EVENTDESCRIPTION_MAX_LENGTH)
     Picture = models.ImageField(blank=True)
     
     # Should be requested from API:
-    Address = models.CharField(max_length=100)
+    Address = models.CharField(max_length=ADDRESS_MAX_LENGTH)
     Longitude = DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
     Latitude = DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
     
     DateTime = models.DateTimeField(default=django.utils.timezone.now)
     Category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    Rating = models.IntegerField()
+    Rating = models.IntegerField(default=0)
     def __str__(self):
         return self.EventName
 

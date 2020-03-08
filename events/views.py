@@ -18,3 +18,6 @@ def login(request):
 
 def search(request):
     return render(request, 'events/base.html')
+    
+def add_event(request):
+    
