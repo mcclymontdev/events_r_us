@@ -14,39 +14,23 @@ class Category(models.Model):
     def __str__(self):
         return self.Name
 
-
-
-       #comment   
 class Event(models.Model):
-    EventsID = models.AutoField(primary_key=True)
-    UserID = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    EventID = models.AutoField(primary_key=True)
+    UserID = models.ForeignKey(User, on_delete=models.CASCADE)
     EventName = models.CharField(max_length=100)
     Description = models.CharField(max_length=500)
     Picture = models.ImageField(blank=True)
+    
+    # Should be requested from API:
     Address = models.CharField(max_length=100)
+    Longitude = DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
+    Latitude = DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
+    
     DateTime = models.DateTimeField(default=django.utils.timezone.now)
     Category = models.ForeignKey(Category, on_delete=models.CASCADE)
     Rating = models.IntegerField()
     def __str__(self):
         return self.EventName
-        
-
-# class User(models.Model):
-#     user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
-#     UserID = models.AutoField(primary_key=True)
-#     Username = models.CharField(max_length=30)
-#     Picture = models.ImageField(upload_to='profile_image', blank=True)
-#     password = models.CharField(max_length=30, blank=True)
-#     def __str__(self):
-#         return self.Username
-
-# class User(AbstractUser):
-#     picture = models.ImageField(upload_to='profile_image', blank=True)
-
-#     location = models.CharField(max_length=90, blank=True)
-
-#     # TODO: Fetch this from map API from location
-#     # location_coords =
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
