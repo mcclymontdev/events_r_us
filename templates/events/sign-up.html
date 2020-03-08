@@ -7,26 +7,51 @@
 
 {% block body_block %}
     <!-- Sign up form -->
+	
+	{% if registered %}
+	<div class="d-flex justify-content-center">
+		<label for="msg">Thank you for registering</label>
+	</div>
+	<button href=>Home</button>
+	{% else %}
     <div class="d-flex justify-content-center">
-        <form id="signup-login-form">
-          <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" class="form-control" id="username" placeholder="Username...">
-          </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" placeholder="Password...">
-          </div>
-          <div class="form-group">
-            <label for="password">Re-type Password</label>
-            <input type="password" class="form-control" id="password2" placeholder="Password...">
-          </div>
-          <button type="submit" class="btn btn-primary" id="signup">Sign up</button>
-          <hr class="my-4">
-          <p>Already have an account?</p>
-          <button type="submit" class="btn btn-secondary" id="signin">Login</button>
+        <form id="user_form" method ="POST" action="{% url 'events:sign-up' %}" encrypte="multipart/form-data">
+		
+			{% csrf_token %}
+			
+			{{ user_form.as_p }}
+			{{ profile_form.as_p }}
+			
+			<div class="form-group">
+				<label for="username">Username</label>
+				<input type="text" class="form-control" id="username" placeholder="Username...">
+			</div>
+			
+			<div class="form-group">
+				<label for="password">Password</label>
+				<input type="password" class="form-control" id="password" placeholder="Password...">
+			</div>
+			
+			<div class="form-group">
+				<label for="password">Re-type Password</label>
+				<input type="password" class="form-control" id="password2" placeholder="Password...">
+			</div>
+			
+			<button type="submit" class="btn btn-primary" id="signup" value="Register">Sign up</button>
         </form>
+		
     </div>
+	
+	<div class="d-flex justify-content-center">
+		<div>
+			<p>Already have an account?</p>
+		</div>
+		<div>
+			<button onclick="{% url 'events:login' %}" class="btn btn-secondary" id="signin" >Login</button>
+		</div>
+	</div>
+
+	{% endif %}
     <!-- End sign up form-->
 {% endblock %}
 

@@ -1,17 +1,17 @@
 from django_registration.forms import RegistrationForm
-
+from django.contrib.auth.models import User
 from events.models import User
+from events.models import UserProfile
+from django import forms
 
-# class signUpForm(RegistrationForm):
-#     class Meta(RegistrationForm.Meta):
-#         model = User
-#         fields = [
-#             "first_name",
-#             "last_name",
-#             User.USERNAME_FIELD,
-#             User.get_email_field_name(),
-#             "password1",
-#             "password2",
-#             "picture",
-#             "location",
-#         ]
+class UserForm(forms.ModelForm):
+	password=forms.CharField(widget=forms.PasswordInput())
+	
+	class Meta:
+		model = User
+		fields = ('username', 'email', 'password',)
+		
+class UserProfileForm(forms.ModelForm):
+	class Meta:
+		model = UserProfile
+		fields = UserProfilefields = ()
