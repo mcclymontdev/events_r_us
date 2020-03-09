@@ -21,14 +21,14 @@ class Event(models.Model):
 
     EventID = models.AutoField(primary_key=True)
     UserID = models.ForeignKey(User, on_delete=models.CASCADE)
-    EventName = models.CharField(max_length=EVENTNAME_MAX_LENGTH)
-    Description = models.CharField(max_length=EVENTDESCRIPTION_MAX_LENGTH)
+    EventName = models.CharField(max_length=NAME_MAX_LENGTH)
+    Description = models.CharField(max_length=DESCRIPTION_MAX_LENGTH)
     Picture = models.ImageField(blank=True)
     
     # Should be requested from API:
     Address = models.CharField(max_length=ADDRESS_MAX_LENGTH)
-    Longitude = DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
-    Latitude = DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
+    Longitude = models.DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
+    Latitude = models.DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
     
     DateTime = models.DateTimeField(default=django.utils.timezone.now)
     Category = models.ForeignKey(Category, on_delete=models.CASCADE)
