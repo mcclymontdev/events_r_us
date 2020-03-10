@@ -18,16 +18,15 @@ class EventForm(forms.ModelForm):
     # Should create a dropdown menu of categories?
     CategoryList = forms.ModelChoiceField(queryset = Category.objects.all())
     
+    Address = forms.CharField(label='Address', max_length=Event.ADDRESS_MAX_LENGTH,help_text="Please enter the address of the event.")
+
     # Handled by API
-    Address = forms.CharField(widget=forms.HiddenInput())
-    Longitude = forms.DecimalField(widget=forms.HiddenInput(), max_digits=22, decimal_places=16)
     Latitude = forms.DecimalField(widget=forms.HiddenInput(), max_digits=22, decimal_places=16)
-    
-    Rating = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
+    Longitude = forms.DecimalField(widget=forms.HiddenInput(), max_digits=22, decimal_places=16)
     
     # We will need slugs for the event urls
     #slug = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     class Meta:
         model = Event
-        fields = ('EventName','Description','Picture', 'DateTime', 'CategoryList')
+        fields = ('EventName','Description','Address', 'Picture', 'DateTime', 'CategoryList')

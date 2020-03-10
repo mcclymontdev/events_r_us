@@ -1,10 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.urls import reverse
 
 from events.forms import EventForm
 
 # from .forms import signUpForm
-from .models import User
+from .models import Event, Category
 
 # Create your views here.
 def index(request):
@@ -22,12 +23,25 @@ def search(request):
 def add_event(request):
     form = EventForm()
 
-    # TODO: Deal with hidden fields, Address + coords
+    # TODO: Implement saving image upload.
     if request.method == 'POST':
         form = EventForm(request.POST, request.FILES)
 
         if form.is_valid():
-            form.save(commit=True)
+            print(form.cleaned_data)
+            event = Event(
+                UserID=request.user, 
+                EventName=form.cleaned_data["EventName"],
+                Description=form.cleaned_data["Description"],
+                Address=form.cleaned_data["Address"],
+                #Picture=null,
+                Longitude=form.cleaned_data["Longitude"],
+                Latitude=form.cleaned_data["Latitude"],
+                DateTime=form.cleaned_data["DateTime"],
+                category=form.cleaned_data["CategoryList"],
+                Rating=0,
+                )
+            event.save()
             return redirect(reverse('events:index'))
         else:
             print(form.errors)

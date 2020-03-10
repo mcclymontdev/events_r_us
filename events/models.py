@@ -31,7 +31,7 @@ class Event(models.Model):
     Latitude = models.DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
     
     DateTime = models.DateTimeField(default=django.utils.timezone.now)
-    Category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     Rating = models.IntegerField(default=0)
     def __str__(self):
         return self.EventName

@@ -11,6 +11,8 @@
     <!-- Tempus Dominus Boostrap 4 (Date and time picker) -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/places.js@1.18.1"></script>
 {% endblock %}
 
 {% block body_block %}
@@ -22,11 +24,7 @@
                 {{ hidden }}
             {% endfor %}
             {% for field in form.visible_fields %}
-                {% if field.name != 'DateTime' %}
-                    {{ field.errors }}
-                    {{ field.help_text }}<br />
-                    {{ field }}<br />
-                {% else %}
+                {% if field.name == 'DateTime' %}
                 <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
                     {{ field.errors }}
                     {{ field.help_text }}<br />
@@ -34,7 +32,11 @@
                     <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
                       <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                     </div>
-                  </div>
+                </div>
+                {% else %}
+                    {{ field.errors }}
+                    {{ field.help_text }}<br />
+                    {{ field }}<br />
                 {% endif %}
             {% endfor %}
             <script>
@@ -47,6 +49,7 @@
             <br/>
             <button class="btn btn-primary" type="submit" name="submit">Create Event</button>
             <div class="p-5"></div>
+            <script src="{% static '/js/address_autocomplete.js' %}"></script>
         </form>
     </div>
 </div>
