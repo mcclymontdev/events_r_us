@@ -22,18 +22,14 @@ def search(request):
 def add_event(request):
     form = EventForm()
 
+    # TODO: Deal with hidden fields, Address + coords
     if request.method == 'POST':
-        form = EventForm(request.POST)
+        form = EventForm(request.POST, request.FILES)
 
         if form.is_valid():
-            # Save the new category to the database.
             form.save(commit=True)
-            # Now that the category is saved, we could confirm this.
-            # For now, just redirect the user back to the index view.
-            return redirect(reverse('events:add_event'))
+            return redirect(reverse('events:index'))
         else:
-            # The supplied form contained errors -
-            # just print them to the terminal.
             print(form.errors)
         
     return render(request, 'events/add_event.html', {'form': form})
