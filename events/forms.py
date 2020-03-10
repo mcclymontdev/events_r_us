@@ -7,7 +7,13 @@ class EventForm(forms.ModelForm):
     Description = forms.CharField(label='Description', max_length=Event.DESCRIPTION_MAX_LENGTH,help_text="Please enter a description for the event.")
     Picture = forms.ImageField(label='Event picture')
     
-    DateTime = forms.DateTimeField(label='Date and time')
+    DateTime = forms.DateTimeField(
+        input_formats=['%d/%m/%Y %H:%M'],
+        widget=forms.DateTimeInput(attrs={
+            'class': 'form-control datetimepicker-input',
+            'data-target': '#datetimepicker1'
+        })
+    )
     
     # Should create a dropdown menu of categories?
     CategoryList = forms.ModelChoiceField(queryset = Category.objects.all())

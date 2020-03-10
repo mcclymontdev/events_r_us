@@ -5,6 +5,14 @@
     Add an event
 {% endblock %}
 
+{% block head_block %}
+    <!-- Moment.js (Date and time picker) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.23.0/moment.min.js" integrity="sha256-VBLiveTKyUZMEzJd6z2mhfxIqz3ZATCuVMawPZGzIfA=" crossorigin="anonymous"></script>
+    <!-- Tempus Dominus Boostrap 4 (Date and time picker) -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
+{% endblock %}
+
 {% block body_block %}
 <div class="container">
     <div class="row">
@@ -14,10 +22,28 @@
                 {{ hidden }}
             {% endfor %}
             {% for field in form.visible_fields %}
-                {{ field.errors }}
-                {{ field.help_text }}<br />
-                {{ field }}<br />
+                {% if field.name != 'DateTime' %}
+                    {{ field.errors }}
+                    {{ field.help_text }}<br />
+                    {{ field }}<br />
+                {% else %}
+                <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                    {{ field.errors }}
+                    {{ field.help_text }}<br />
+                    {{ field }}<br />
+                    <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                  </div>
+                {% endif %}
             {% endfor %}
+            <script>
+                $(function () {
+                  $("#datetimepicker1").datetimepicker({
+                    format: 'DD/MM/YYYY HH:mm',
+                  });
+                });
+              </script>
             <br/>
             <button class="btn btn-primary" type="submit" name="submit">Create Event</button>
             <div class="p-5"></div>
