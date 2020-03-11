@@ -23,7 +23,6 @@ def search(request):
 def add_event(request):
     form = EventForm()
 
-    # TODO: Implement saving image upload.
     if request.method == 'POST':
         form = EventForm(request.POST, request.FILES)
 
@@ -47,3 +46,13 @@ def add_event(request):
             print(form.errors)
         
     return render(request, 'events/add_event.html', {'form': form})
+
+def show_event(request, id, event_slug):
+    context_dict = {}
+    try:
+        context_dict['event'] = Event.objects.get(EventID=id, slug=event_slug)
+
+    except Event.DoesNotExist:
+        context_dict['event'] = None
+
+    return render(request, 'events/event.html', context=context_dict)

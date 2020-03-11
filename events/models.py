@@ -7,6 +7,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.conf import settings
 
+from django.template.defaultfilters import slugify
+
 # Create your models here.
 class Category(models.Model):
     Name = models.CharField(max_length=30,primary_key=True)
@@ -33,6 +35,13 @@ class Event(models.Model):
     DateTime = models.DateTimeField(default=django.utils.timezone.now)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     Rating = models.IntegerField(default=0)
+
+    slug = models.SlugField()
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.EventName)
+        super(Event, self).save(*args, **kwargs)
+
     def __str__(self):
         return self.EventName
 

@@ -52,3 +52,6 @@ share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+migrations
+migrations/
+migrations/*
