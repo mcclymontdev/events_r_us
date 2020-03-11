@@ -34,7 +34,7 @@ def add_event(request):
                 EventName=form.cleaned_data["EventName"],
                 Description=form.cleaned_data["Description"],
                 Address=form.cleaned_data["Address"],
-                #Picture=null,
+                Picture=form.cleaned_data["Picture"],
                 Longitude=form.cleaned_data["Longitude"],
                 Latitude=form.cleaned_data["Latitude"],
                 DateTime=form.cleaned_data["DateTime"],

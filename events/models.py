@@ -23,7 +23,7 @@ class Event(models.Model):
     UserID = models.ForeignKey(User, on_delete=models.CASCADE)
     EventName = models.CharField(max_length=NAME_MAX_LENGTH)
     Description = models.CharField(max_length=DESCRIPTION_MAX_LENGTH)
-    Picture = models.ImageField(blank=True)
+    Picture = models.ImageField(upload_to='event_image', blank=True)
     
     # Should be requested from API:
     Address = models.CharField(max_length=ADDRESS_MAX_LENGTH)
