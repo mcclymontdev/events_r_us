@@ -17,40 +17,46 @@
 
 {% block body_block %}
 <div class="container">
-    <div class="row">
-        <form role="form" id="event_form" method="post" enctype="multipart/form-data" action="{% url 'events:add_event' %}">
-            {% csrf_token %}
-            {% for hidden in form.hidden_fields %}
-                {{ hidden }}
-            {% endfor %}
-            {% for field in form.visible_fields %}
-                {% if field.name == 'DateTime' %}
-                <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                    {{ field.errors }}
-                    {{ field.help_text }}<br />
-                    {{ field }}<br />
-                    <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
-                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+    {% if user.is_authenticated %}
+        <div class="row">
+            <form role="form" id="event_form" method="post" enctype="multipart/form-data" action="{% url 'events:add_event' %}">
+                {% csrf_token %}
+                {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+                {% for field in form.visible_fields %}
+                    {% if field.name == 'DateTime' %}
+                    <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                        {{ field.errors }}
+                        {{ field.help_text }}<br />
+                        {{ field }}<br />
+                        <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
                     </div>
-                </div>
-                {% else %}
-                    {{ field.errors }}
-                    {{ field.help_text }}<br />
-                    {{ field }}<br />
-                {% endif %}
-            {% endfor %}
-            <script>
-                $(function () {
-                  $("#datetimepicker1").datetimepicker({
-                    format: 'DD/MM/YYYY HH:mm',
-                  });
-                });
-            </script>
-            <br/>
-            <button class="btn btn-primary" type="submit" name="submit">Create Event</button>
-            <div class="p-5"></div>
-            <script src="{% static '/js/address_autocomplete.js' %}"></script>
-        </form>
-    </div>
+                    {% else %}
+                        {{ field.errors }}
+                        {{ field.help_text }}<br />
+                        {{ field }}<br />
+                    {% endif %}
+                {% endfor %}
+                <script>
+                    $(function () {
+                    $("#datetimepicker1").datetimepicker({
+                        format: 'DD/MM/YYYY HH:mm',
+                    });
+                    });
+                </script>
+                <br/>
+                <button class="btn btn-primary" type="submit" name="submit">Create Event</button>
+                <div class="p-5"></div>
+                <script src="{% static '/js/address_autocomplete.js' %}"></script>
+            </form>
+        </div>
+    {% else %}
+        <div class="row">
+            <p>You must be logged in to add an event.</p>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}
