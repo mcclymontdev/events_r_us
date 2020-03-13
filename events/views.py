@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login as auth_login
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
@@ -48,10 +49,13 @@ def signup(request):
 		
 	return render(request, 'events/sign-up.html', context = {'user_form': user_form, 'profile_form' : profile_form, 'registered':registered})
 
-def login(request):
-    return render(request, 'events/login.html')
+def user_logout(request):
     
-def user_login(request):
+    logout(request)
+    
+    return redirect(reverse('events:index'))
+    
+def login(request):
     
     if request.method == 'POST':
         
@@ -65,9 +69,9 @@ def user_login(request):
             
             if user.is_active:
             
-                login(request, user)
+                auth_login(request, user)
                 
-                return redirect(reverse('1events:index'))
+                return redirect(reverse('events:index'))
                 
             else:
             
@@ -75,6 +79,7 @@ def user_login(request):
                 
         else:
         
+            print(f"Invalid Login details: {username}, {password}")
             return HttpResponse ("Invalid login credentials")
             
     else:
