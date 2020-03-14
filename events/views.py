@@ -2,14 +2,26 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse
 
-from events.forms import EventForm
+from events.forms import EventForm, SearchForm
 
 # from .forms import signUpForm
 from .models import Event, Category
 
 # Create your views here.
 def index(request):
-    return render(request, 'events/index.html')
+    form = SearchForm()
+
+    if request.method == 'POST':
+        form = SearchForm(request.POST)
+
+        if form.is_valid():
+            print("Location data received successfully!")
+            print(form.cleaned_data)
+            return redirect(reverse('events:index'))
+        else:
+            print(form.errors)
+
+    return render(request, 'events/index.html', {'form': form})
 
 def signup(request):
     return render(request, 'events/sign-up.html')

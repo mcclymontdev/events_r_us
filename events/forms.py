@@ -29,3 +29,8 @@ class EventForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = ('EventName','Description','Address', 'Picture', 'DateTime', 'CategoryList')
+
+# Placeholder form, will need more fields later for handling refined searches etc.
+class SearchForm(forms.Form):
+    Latitude = forms.DecimalField(widget=forms.HiddenInput(), max_digits=22, decimal_places=16)
+    Longitude = forms.DecimalField(widget=forms.HiddenInput(), max_digits=22, decimal_places=16)
