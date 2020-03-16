@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse
+from events.helpers import haversine
 
 from events.forms import EventForm, SearchForm
 
@@ -27,11 +28,15 @@ def search(request):
         if form.is_valid():
             print("Location data received successfully!")
             print(form.cleaned_data)
+ 
+            Latitude = form.cleaned_data['Latitude']
+            Longitude = form.cleaned_data['Longitude']
 
             events = []
             all_events = Event.objects.all()
             for event in all_events:
                 print(event.EventName)
+                event.distance = haversine(Latitude, Longitude, event.Latitude, event.Longitude)
                 events.append(event)
 
             return render(request, 'events/search.html', {'events_list': events})
