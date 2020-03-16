@@ -9,4 +9,5 @@ urlpatterns = [
     path('login', views.login, name='login'),
     path('add_event', views.add_event, name='add_event'),
     path('event/<int:id>/<slug:event_slug>/', views.show_event, name='show_event'),
+    path('search', views.search, name='search'),
 ]

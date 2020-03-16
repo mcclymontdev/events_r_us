@@ -10,18 +10,7 @@ from .models import Event, Category
 # Create your views here.
 def index(request):
     form = SearchForm()
-
-    if request.method == 'POST':
-        form = SearchForm(request.POST)
-
-        if form.is_valid():
-            print("Location data received successfully!")
-            print(form.cleaned_data)
-            return redirect(reverse('events:index'))
-        else:
-            print(form.errors)
-
-    return render(request, 'events/index.html', {'form': form})
+    return render(request, 'events/index.html', {'form' : form})
 
 def signup(request):
     return render(request, 'events/sign-up.html')
@@ -30,7 +19,26 @@ def login(request):
     return render(request, 'events/login.html')
 
 def search(request):
-    return render(request, 'events/base.html')
+    form = SearchForm()
+
+    if request.method == 'POST':
+        form = SearchForm(request.POST)
+
+        if form.is_valid():
+            print("Location data received successfully!")
+            print(form.cleaned_data)
+
+            events = []
+            all_events = Event.objects.all()
+            for event in all_events:
+                print(event.EventName)
+                events.append(event)
+
+            return render(request, 'events/search.html', {'events_list': events})
+        else:
+            print(form.errors)
+
+    return render(request, 'events/search.html')
     
 def add_event(request):
     form = EventForm()

@@ -18,7 +18,7 @@
     <div class="d-flex justify-content-center">
         <div id="finder-box" class="jumbotron">
 
-            <form role="form" name="search_form" id="search_form" method="post" action="{% url 'events:index' %}">
+            <form role="form" name="search_form" id="search_form" method="post" action="{% url 'events:search' %}">
                 {% csrf_token %}
                 {% for hidden in form.hidden_fields %}
                     {{ hidden }}

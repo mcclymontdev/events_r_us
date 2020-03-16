@@ -1,0 +1,75 @@
+{% extends 'events/base.html' %}
+{% load static %}
+
+{% block title_block %}
+    Search
+{% endblock %}
+
+{% block head_block %}
+
+{% endblock %}
+
+{% block body_block %}
+    <!-- Filter search form -->
+    <div class="container" id="filter-box">
+        <form>
+            <div class="form-row justify-content-center">
+                <div class="form-group mr-3 ">
+                    <label for="sortBy">Sort by</label>
+                        <select id="sortBy" class="form-control">
+                            <option selected>Date occuring</option>
+                            <option>Date added</option>
+                        </select>
+                      <label style="padding-top: 7px;" for="sortBy"><a href="index.html">Change location</a></label>
+                </div>
+                <div class="form-group mr-3 ">
+                        <label for="eventType">Event type</label>
+                        <select id="eventType" class="form-control">
+                            <option selected>Any</option>
+                            <option>One-off</option>
+                            <option>Recurring</option>
+                        </select>
+                </div>
+                <div class="form-group mr-3 ">
+                    <label for="inputState">Category</label>
+                        <select id="category" class="form-control">
+                            <option selected>Any</option>
+                            <option>Concert</option>
+                            <option>Class</option>
+                            <option>...</option>
+                        </select>
+                </div>
+                <div class="form-group mr-3 ">
+                        <label for="keywords">Keywords</label>
+                        <input type="text" class="form-control" id="keywords" placeholder="Keywords...">
+                </div>
+                <div class="form-group ">
+                        <button type="submit" class="btn btn-primary form-control" style="margin-top: 30px">Filter</button>
+                </div>
+            </div>
+        </form>
+        <hr class="my-4">
+    </div>
+    <!-- end of filter box -->
+
+    <!-- Event cards -->
+    <div class="container justify-content-center event-card-box">
+        <div class="row">
+            {% for event in events_list %}
+            <div class="col-sm-4 mb-5">
+                <div class="card">
+                    <img class="card-img-top" src="{{ event.Picture.url }}" alt="Event thumbnail">
+                    <div class="card-body">
+                      <h5 class="card-title">{{ event.EventName }}</h5>
+                      <p class="card-text">{{ event.Description }}</p>
+                    </div>
+                    <div class="card-footer">
+                      <small class="text-muted">{{ event.DateTime }}</small>
+                    </div>
+                  </div>
+            </div>
+            {% endfor %}
+          </div>
+    </div>
+    <!-- End of event cards -->
+{% endblock %}
