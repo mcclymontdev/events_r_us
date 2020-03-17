@@ -30,7 +30,16 @@ class EventForm(forms.ModelForm):
         model = Event
         fields = ('EventName','Description','Address', 'Picture', 'DateTime', 'CategoryList')
 
-# Placeholder form, will need more fields later for handling refined searches etc.
 class SearchForm(forms.Form):
     Latitude = forms.DecimalField(widget=forms.HiddenInput(), max_digits=22, decimal_places=16)
     Longitude = forms.DecimalField(widget=forms.HiddenInput(), max_digits=22, decimal_places=16)
+
+class RefinedSearchForm(forms.Form):
+    Latitude = forms.DecimalField(widget=forms.HiddenInput(), max_digits=22, decimal_places=16)
+    Longitude = forms.DecimalField(widget=forms.HiddenInput(), max_digits=22, decimal_places=16)
+
+    distance = forms.ChoiceField(choices=['Anywhere', 'Within 50 miles', 'Within 100 miles', 'Within 200 miles'])
+    sortBy = forms.ChoiceField(choices=['Distance', 'Date occuring', 'Date added'])
+    eventType = forms.ChoiceField(label='Event type', choices=['Any', 'One-off', 'Recurring'])
+    category = forms.ModelChoiceField(label='Category', queryset = Category.objects.all())
+    keywords = forms.CharField(label='Keywords', max_length=30)
