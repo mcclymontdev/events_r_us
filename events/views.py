@@ -39,11 +39,11 @@ def search(request):
                 event.distance = haversine(Latitude, Longitude, event.Latitude, event.Longitude)
                 events.append(event)
 
-            return render(request, 'events/search.html', {'events_list': events})
+            return render(request, 'events/search.html', {'form': form, 'events_list': events})
         else:
             print(form.errors)
 
-    return render(request, 'events/search.html')
+    return render(request, 'events/search.html', {'form': form})
     
 def add_event(request):
     form = EventForm()

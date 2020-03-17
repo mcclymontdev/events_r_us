@@ -1,5 +1,6 @@
 {% extends 'events/base.html' %}
 {% load static %}
+{% load add_attr %}
 
 {% block title_block %}
     Search
@@ -12,39 +13,26 @@
 {% block body_block %}
     <!-- Filter search form -->
     <div class="container" id="filter-box">
-        <form>
+        <form role="form" name="search_form" id="search_form" method="post" action="{% url 'events:search' %}">
+            {% csrf_token %}
+            {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+            {% endfor %}
             <div class="form-row justify-content-center">
-                <div class="form-group mr-3 ">
-                    <label for="sortBy">Sort by</label>
-                        <select id="sortBy" class="form-control">
-                            <option selected>Date occuring</option>
-                            <option>Date added</option>
-                        </select>
-                      <label style="padding-top: 7px;" for="sortBy"><a href="index.html">Change location</a></label>
+                {% for field in form.visible_fields %}
+                    <div class="form-group mr-3 ">
+                        {{ field.label_tag }}
+                        {{ field|add_attr:"class:form-control" }}
+                    </div>
+                {% endfor %}
+                <div class="form-group mr-3">
+                        <button type="submit" class="refine-search btn btn-primary form-control" >Filter</button>
                 </div>
-                <div class="form-group mr-3 ">
-                        <label for="eventType">Event type</label>
-                        <select id="eventType" class="form-control">
-                            <option selected>Any</option>
-                            <option>One-off</option>
-                            <option>Recurring</option>
-                        </select>
+                <div class="form-group mr-3">
+                    <p class="refine-search">or</p>
                 </div>
-                <div class="form-group mr-3 ">
-                    <label for="inputState">Category</label>
-                        <select id="category" class="form-control">
-                            <option selected>Any</option>
-                            <option>Concert</option>
-                            <option>Class</option>
-                            <option>...</option>
-                        </select>
-                </div>
-                <div class="form-group mr-3 ">
-                        <label for="keywords">Keywords</label>
-                        <input type="text" class="form-control" id="keywords" placeholder="Keywords...">
-                </div>
-                <div class="form-group ">
-                        <button type="submit" class="btn btn-primary form-control" style="margin-top: 30px">Filter</button>
+                <div class="form-group mr-3">
+                    <a href="{% url 'events:index' %}" class="refine-search btn btn-outline-dark">Change location</a>
                 </div>
             </div>
         </form>
