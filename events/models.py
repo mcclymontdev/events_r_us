@@ -4,6 +4,10 @@ import django
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 
+from django.contrib.auth.models import AbstractUser, PermissionsMixin
+from django.conf import settings
+
+from django.template.defaultfilters import slugify
 
 # Create your models here.
 class Category(models.Model):
@@ -12,36 +16,48 @@ class Category(models.Model):
     def __str__(self):
         return self.Name
 
-
-
-       #comment   
 class Event(models.Model):
-    EventsID = models.AutoField(primary_key=True)
+    NAME_MAX_LENGTH = 100
+    DESCRIPTION_MAX_LENGTH = 500
+    ADDRESS_MAX_LENGTH = 100
+
+    EventID = models.AutoField(primary_key=True)
     UserID = models.ForeignKey(User, on_delete=models.CASCADE)
-    EventName = models.CharField(max_length=100)
-    Description = models.CharField(max_length=500)
-    Picture = models.ImageField(blank=True)
-    Address = models.CharField(max_length=100)
+    EventName = models.CharField(max_length=NAME_MAX_LENGTH)
+    Description = models.CharField(max_length=DESCRIPTION_MAX_LENGTH)
+    Picture = models.ImageField(upload_to='event_image', blank=True)
+    
+    # Should be requested from API:
+    Address = models.CharField(max_length=ADDRESS_MAX_LENGTH)
+    Longitude = models.DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
+    Latitude = models.DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
+    
     DateTime = models.DateTimeField(default=django.utils.timezone.now)
-    Category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    Rating = models.IntegerField()
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    Rating = models.IntegerField(default=0)
+
+    slug = models.SlugField()
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.EventName)
+        super(Event, self).save(*args, **kwargs)
+
     def __str__(self):
         return self.EventName
-        
 
-class User(models.Model):
-    user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
-    UserID = models.AutoField(primary_key=True)
-    Username = models.CharField(max_length=30)
-    Picture = models.ImageField(upload_to='profile_image', blank=True)
-    password = models.CharField(max_length=30, blank=True)
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    picture = models.ImageField(upload_to='profile_image', blank=True)
+    location = models.CharField(max_length=60, blank=True)
+
     def __str__(self):
-        return self.Username
-        
+        return self.user.Username
+
 class Comment(models.Model):
     CommentID = models.AutoField(primary_key=True)
     EventID = models.ForeignKey(Event, on_delete=models.CASCADE)
-    UserID = models.ForeignKey(User, on_delete=models.CASCADE)
+    UserID = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     Comment = models.CharField(max_length=200)
     #ParentCommentID = models.ForeignKey(Comments, on_delete=models.CASCADE)
     def __str__(self):
