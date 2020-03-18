@@ -1,0 +1,22 @@
+{% extends 'events/base.html' %}
+{% load static %}
+
+{% block title_block %}
+    Add an event
+{% endblock %}
+
+{% block head_block %}
+
+{% endblock %}
+
+{% block body_block %}
+<div class="container">
+    <!-- Test template for events -->
+        <div>
+            <p>Name: {{ event.EventName }}</p>
+            <p>Description: {{ event.Description }}</p>
+            <p>Date and time: {{ event.DateTime }}</p>
+            <p>Category: {{ event.category }}</p>
+        </div>
+</div>
+{% endblock %}
