@@ -26,18 +26,57 @@ def search(request):
         form = SearchForm(request.POST)
 
         if form.is_valid():
-            print("Location data received successfully!")
             print(form.cleaned_data)
- 
+
+            # Basic search
             Latitude = form.cleaned_data['Latitude']
             Longitude = form.cleaned_data['Longitude']
 
+            # Refined search
+            withinDistance = form.cleaned_data['distance']
+            sortBy = form.cleaned_data['sortBy']
+            eventType = form.cleaned_data['eventType']
+            category = form.cleaned_data['category']
+            keywords = form.cleaned_data['keywords']
+
+            # TODO: Delete debug prints to decrease database hits
+            
+            query = Event.objects.all()
+
+            # Filter events based on refined search options
+            print("Initial query: " + str(query))
+            if category != None:
+                query = query.filter(category = category)
+                print("category: " + str(query))
+            if (eventType != "" and eventType != "Any"):
+                query = query.filter(eventType = eventType)
+                print("eventType: " + str(query))
+
+            # Event name keyword search
+            if keywords != "":
+                for keyword in keywords.split():
+                    query = query.filter(EventName__icontains=keyword)
+
+            if sortBy == "Date occuring":
+                query = query.order_by('DateTime')
+                print("sortBy: " + str(query))
+            print("Final query: " + str(query))
+
+            # For context dictionary
             events = []
-            all_events = Event.objects.all()
-            for event in all_events:
-                print(event.EventName)
-                event.distance = haversine(Latitude, Longitude, event.Latitude, event.Longitude)
-                events.append(event)
+
+            # Calculate distances for each event from the user
+            for event in query:
+                # Calculate distance between our location and the event location
+                haversineDistance = haversine(Latitude, Longitude, event.Latitude, event.Longitude)
+                # Filter results by distance if required.
+                if withinDistance == "" or haversineDistance < int(withinDistance):
+                    event.distance = haversineDistance
+                    events.append(event)
+
+            # We need to do this filter after calculating the distances
+            if sortBy == "Distance":
+                events.sort(key=lambda e: e.distance)
 
             return render(request, 'events/search.html', {'form': form, 'events_list': events})
         else:
@@ -63,6 +102,7 @@ def add_event(request):
                 Latitude=form.cleaned_data["Latitude"],
                 DateTime=form.cleaned_data["DateTime"],
                 category=form.cleaned_data["CategoryList"],
+                eventType=form.cleaned_data["eventType"],
                 Rating=0,
                 )
             event.save()
