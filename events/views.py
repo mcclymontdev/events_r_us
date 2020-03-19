@@ -74,6 +74,10 @@ def search(request):
                     event.distance = haversineDistance
                     events.append(event)
 
+            # We need to do this filter after calculating the distances
+            if sortBy == "Distance":
+                events.sort(key=lambda e: e.distance)
+
             return render(request, 'events/search.html', {'form': form, 'events_list': events})
         else:
             print(form.errors)
