@@ -1,23 +1,89 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login as auth_login
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+from django_registration.views import RegistrationView
+from events.forms import UserForm, UserProfileForm, EventForm, SearchForm
 from events.helpers import haversine
-
-from events.forms import EventForm, SearchForm
-
 # from .forms import signUpForm
-from .models import Event, Category
+from .models import User, Event, Category
 
 # Create your views here.
 def index(request):
-    form = SearchForm()
-    return render(request, 'events/index.html', {'form' : form})
+    return render(request, 'events/index.html')
 
 def signup(request):
-    return render(request, 'events/sign-up.html')
 
+	registered = False
+	
+	if request.method == 'POST':
+		
+		user_form = UserForm(request.POST)
+		profile_form = UserProfileForm(request.POST)
+		
+		if user_form.is_valid() and profile_form.is_valid():
+		
+			user = user_form.save()
+			
+			user.set_password(user.password)
+			
+			user.save()
+			
+			profile = profile_form.save(commit=False)
+			profile.user = user
+			profile.save()
+			
+			registered = True
+			
+		else:
+			
+			print(user_form.errors, profile_form.errors)
+			
+	else:
+		
+		user_form = UserForm()
+		profile_form = UserProfileForm()
+		
+	return render(request, 'events/sign-up.html', context = {'user_form': user_form, 'profile_form' : profile_form, 'registered':registered})
+
+def user_logout(request):
+    
+    logout(request)
+    
+    return redirect(reverse('events:index'))
+    
 def login(request):
-    return render(request, 'events/login.html')
+    
+    if request.method == 'POST':
+        
+        username = request.POST.get('username')
+        
+        password = request.POST.get('password')
+        
+        user = authenticate(username=username, password=password)
+        
+        if user:
+            
+            if user.is_active:
+            
+                auth_login(request, user)
+                
+                return redirect(reverse('events:index'))
+                
+            else:
+            
+                return HttpResponse("Your events account is disabled")
+                
+        else:
+        
+            print(f"Invalid Login details: {username}, {password}")
+            return HttpResponse ("Invalid login credentials")
+            
+    else:
+    
+        return render(request, 'events/login.html')
 
 def search(request):
     form = SearchForm()
@@ -121,3 +187,5 @@ def show_event(request, id, event_slug):
         context_dict['event'] = None
 
     return render(request, 'events/event.html', context=context_dict)
+def account(request):
+    return render(request, 'events/login.html')
