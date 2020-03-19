@@ -5,6 +5,10 @@
     Home
 {% endblock %}
 
+{% block head_block %}
+    <script src="{% static '/js/get_location.js' %}"></script>
+{% endblock %}
+
 {% block body_block %}
     <!--
         Image background
@@ -13,14 +17,23 @@
 
     <div class="d-flex justify-content-center">
         <div id="finder-box" class="jumbotron">
+
+            <form role="form" name="search_form" id="search_form" method="post" action="{% url 'events:search' %}">
+                {% csrf_token %}
+                {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+            </form>
+
             <div class="d-flex justify-content-center">
 			<!--
 				This button should request the user's location and make a request to the search view with the location data (map API)
-			-->
-                <a href="#" class="btn btn-lg btn-primary">Find local events 
+            -->
+                <button id="get_location_button" class="btn btn-lg btn-primary" type="button" onclick="getLocation()">Find local events 
                 <i style="margin-left: 5px;" class="fa fa-location-arrow" aria-hidden="true"></i>
-                </a>
+                </button>
             </div>
+
 
             <hr class="my-4">
 

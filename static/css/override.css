@@ -43,6 +43,14 @@
   padding-top: 50px;
 }
 
+.refine-search{
+  margin-top: 30px;
+}
+
+p.refine-search{
+  margin-top: 37px;
+}
+
 /*
     Override primary button colours to match colour scheme
 */
