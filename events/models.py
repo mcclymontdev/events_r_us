@@ -36,6 +36,12 @@ class Event(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     Rating = models.IntegerField(default=0)
 
+    EVENT_TYPES = (
+        ('One-off','One-off'),
+        ('Recurring','Recurring')
+    )
+    eventType = models.CharField(choices = EVENT_TYPES, max_length=9)
+
     slug = models.SlugField()
 
     def save(self, *args, **kwargs):

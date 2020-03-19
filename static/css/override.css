@@ -51,6 +51,10 @@ p.refine-search{
   margin-top: 37px;
 }
 
+a.event-link {
+  color: #1a5ba3;
+}
+
 /*
     Override primary button colours to match colour scheme
 */
