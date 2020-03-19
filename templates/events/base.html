@@ -25,26 +25,27 @@
     -->
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="d-flex flex-grow-1">
-            <a class="navbar-brand d-lg-inline-block" href="#">
+            <a class="navbar-brand d-lg-inline-block"href="{% url 'events:index' %}">
                 <img src="{% static '/images/navbar-image.png' %}" height="55" alt="Events R Us logo">
             </a>
         </div>
         <div class="navbar-collapse flex-grow-1 text-right">
             <ul class="navbar-nav ml-auto flex-nowrap font-weight-bold text-uppercase">
-				<!-- 
-					TODO: Link these to the proper location once the views are setup
-				-->
-
-				<!--
-					TODO: Make authenticated user navbar links
-				-->
-
-                <li class="nav-item">
-                    <a href="#" class="nav-link m-2">Log in</a>
+				{% if user.is_authenticated %}
+				<li class="nav-item">
+                    <a href="/events/account" class="nav-link m-2">Account</a>
+                </li>
+				<li class="nav-item">
+                    <a href="{% url 'events:logout' %}" class="nav-link m-2">Sign Out</a>
+                </li>
+				{% else %}
+				<li class="nav-item">
+                    <a href="{% url 'events:login' %}" class="nav-link m-2">Log in</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link m-2">Sign up</a>
+                    <a href="{% url 'events:sign-up' %}" class="nav-link m-2">Sign up</a>
                 </li>
+				{% endif %}
 
             </ul>
         </div>
