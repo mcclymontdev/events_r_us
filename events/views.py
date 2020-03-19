@@ -7,12 +7,11 @@ from django.contrib.auth.decorators import login_required
 from django_registration.views import RegistrationView
 from events.forms import UserForm, UserProfileForm, EventForm, SearchForm
 from events.helpers import haversine
-# from .forms import signUpForm
 from .models import User, Event, Category
 
-# Create your views here.
 def index(request):
-    return render(request, 'events/index.html')
+    form = SearchForm()
+    return render(request, 'events/index.html', {'form' : form})
 
 def signup(request):
 
