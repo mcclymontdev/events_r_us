@@ -48,13 +48,17 @@
                 <div class="card">
                     <img class="card-img-top" src="{{ event.Picture.url }}" alt="Event thumbnail">
                     <div class="card-body">
-                      <h5 class="card-title">{{ event.EventName }}</h5>
-                      <p class="card-text">{{ event.Description }}</p>
-                      <hr>
-                      <p>Approx. {{ event.distance }} miles away.</p>
+                        <h5 class="card-title">
+                            <a href="{% url 'events:show_event' id=event.EventID event_slug=event.slug %}">
+                                {{ event.EventName }}
+                            </a>
+                        </h5>
+                        <p class="card-text">{{ event.Description }}</p>
+                        <hr>
+                        <p>Approx. {{ event.distance }} miles away.</p>
                     </div>
                     <div class="card-footer">
-                      <small class="text-muted">{{ event.DateTime }}</small>
+                        <small class="text-muted">{{ event.DateTime }}</small>
                     </div>
                   </div>
             </div>
