@@ -2,7 +2,7 @@
 from django_registration.forms import RegistrationForm
 from django.contrib.auth.models import User
 from events.models import User
-from events.models import UserProfile
+from events.models import UserProfile, Event, Category
 from django import forms
 
 class UserForm(forms.ModelForm):
@@ -16,10 +16,9 @@ class UserProfileForm(forms.ModelForm):
 	class Meta:
 		model = UserProfile
 		fields = UserProfilefields = ()
-=======
-from django import forms
 
-from events.models import Event, Category
+
+
 
 class EventForm(forms.ModelForm):
     EventName = forms.CharField(label='Event name', max_length=Event.NAME_MAX_LENGTH,help_text="Please enter the event name.")
@@ -58,4 +57,4 @@ class SearchForm(forms.Form):
     eventType = forms.ChoiceField(label='Event type', choices=[('Any','Any'), ('One-off','One-off'), ('Recurring','Recurring')], required=False)
     category = forms.ModelChoiceField(label='Category', queryset = Category.objects.all(), required=False)
     keywords = forms.CharField(label='Keywords', max_length=30, required=False)
->>>>>>> origin/integration
+
