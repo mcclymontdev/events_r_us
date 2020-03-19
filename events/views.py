@@ -26,16 +26,19 @@ def search(request):
         form = SearchForm(request.POST)
 
         if form.is_valid():
-            print("Location data received successfully!")
             print(form.cleaned_data)
  
             Latitude = form.cleaned_data['Latitude']
             Longitude = form.cleaned_data['Longitude']
+            withinDistance = form.cleaned_data['distance']
+            sortBy = form.cleaned_data['sortBy']
+            eventType = form.cleaned_data['eventType']
+            category = form.cleaned_data['category']
+            keywords = form.cleaned_data['keywords']
 
             events = []
             all_events = Event.objects.all()
             for event in all_events:
-                print(event.EventName)
                 event.distance = haversine(Latitude, Longitude, event.Latitude, event.Longitude)
                 events.append(event)
 

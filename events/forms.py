@@ -17,6 +17,8 @@ class EventForm(forms.ModelForm):
     
     # Creates a list of categories
     CategoryList = forms.ModelChoiceField(queryset = Category.objects.all())
+
+    eventType = forms.ChoiceField(choices= Event.EVENT_TYPES, required=True)
     
     Address = forms.CharField(label='Address', max_length=Event.ADDRESS_MAX_LENGTH,help_text="Please enter the address of the event.")
 
@@ -39,3 +41,7 @@ class SearchForm(forms.Form):
     eventType = forms.ChoiceField(label='Event type', choices=[('Any','Any'), ('One-off','One-off'), ('Recurring','Recurring')], required=False)
     category = forms.ModelChoiceField(label='Category', queryset = Category.objects.all(), required=False)
     keywords = forms.CharField(label='Keywords', max_length=30, required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(SearchForm, self).__init__(*args, **kwargs)
+        self.fields['category'].empty_label = "Any"
