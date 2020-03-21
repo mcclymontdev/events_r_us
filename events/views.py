@@ -137,6 +137,7 @@ def search(request):
                 # Filter results by distance if required.
                 if withinDistance == "" or haversineDistance < int(withinDistance):
                     event.distance = haversineDistance
+                    event.Description = event.Description[:200] + "..."
                     events.append(event)
 
             # We need to do this filter after calculating the distances
