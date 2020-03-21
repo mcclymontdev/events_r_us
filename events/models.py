@@ -18,7 +18,7 @@ class Category(models.Model):
 
 class Event(models.Model):
     NAME_MAX_LENGTH = 100
-    DESCRIPTION_MAX_LENGTH = 500
+    DESCRIPTION_MAX_LENGTH = 1250
     ADDRESS_MAX_LENGTH = 100
 
     EventID = models.AutoField(primary_key=True)
