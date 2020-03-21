@@ -65,8 +65,64 @@ a.event-link {
   -moz-box-shadow: 0 1px 2px rgba(17, 13, 13, 0.35);
 }
 
-.img-fluid {
-  max-height: 30%;
+.height-crop {
+  max-height: 400px;
+  overflow: hidden;
+}
+
+/*
+    Event image popup
+*/
+
+.popup {
+  /* Keeping the popup on the first layer */
+  z-index: 1;
+  display: none;
+  position: fixed;
+  padding-top: 6%;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(28, 39, 49, 0.562);
+}
+
+.popup-content {
+  margin: auto;
+  display: block;
+  max-height: 80%;
+  max-width: 95%;
+  animation-name: slide-in;
+  animation-duration: 1.25s;
+}
+
+/*
+    Slides in from the top and fades in
+*/
+@keyframes slide-in {
+  from {
+    opacity:0%;
+    transform:translateY(-75%);
+  }
+  to {
+    opacity:100%;
+    transform:translateY(0);
+  }
+}
+
+.close-popup {
+  position: absolute;
+  top: 2%;
+  right: 3%;
+  color: #3fc1c9;
+  font-size: 60px;
+}
+
+.close-popup:hover {
+  /* Make it look clickable to the user */
+  cursor: pointer;
+  color: #364f6b;
 }
 
 /*

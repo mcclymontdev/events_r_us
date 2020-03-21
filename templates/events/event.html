@@ -6,12 +6,22 @@
 {% endblock %}
 
 {% block head_block %}
-
+    <script src="{% static '/js/image_popup.js' %}"></script>
 {% endblock %}
 
 {% block body_block %}
 <div class="container">
-    <img src="{{ event.Picture.url }}" class="event-image-shadow img-fluid" id="event-header-image" alt="Event image">
+    <div id="event-header-image" class="height-crop event-image-shadow">
+        <img src="{{ event.Picture.url }}" class="img-fluid"  id="event-image" alt="Event image">
+    </div>
+
+    <div id="event-image-popup" class="popup">
+        <span class="close-popup"><i class="fa fa-times" aria-hidden="true"></i></span>
+
+        <!-- Modal Content (The Image) -->
+        <img class="popup-content" id="popup-image">
+    </div>
+
     <div class="row">
       <!--
         Main body
