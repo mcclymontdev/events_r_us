@@ -187,5 +187,28 @@ def show_event(request, id, event_slug):
         context_dict['event'] = None
 
     return render(request, 'events/event.html', context=context_dict)
+
 def account(request):
     return render(request, 'events/login.html')
+
+def manage_events(request):
+    context_dict = {}
+
+    try:
+        context_dict['events_list'] = Event.objects.filter(UserID=request.user)
+    except:
+        context_dict['events_list'] = None
+    
+    return render(request, 'events/manage_events.html', context=context_dict)
+
+def edit_event(request, id):
+    
+    org_event = Event.objects.get(EventID=id, UserID=request.user)
+    form = EventForm(request.POST or None, instance=org_event, initial={'Latitude':org_event.Latitude, 'Longitude':org_event.Longitude, 'Picture':org_event.Picture})
+
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            return redirect('events:show_event', id=id, event_slug=org_event.slug)
+
+    return render(request, 'events/edit_event.html', {'form': form, 'id':id})
