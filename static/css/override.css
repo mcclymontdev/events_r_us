@@ -93,6 +93,10 @@ a.event-link {
   padding-top: 1vw;
 }
 
+#create-new-event-button {
+  margin-bottom: 1vw;
+}
+
 /*
     Event image popup
 */
