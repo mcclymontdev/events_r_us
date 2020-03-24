@@ -22,13 +22,19 @@ def populate():
         {'username':'Steve5013', 'email':'Steve5013@example.com', 'password':'greenjewel20', 'first_name':'Steve', 'last_name':'Jones'},
     ]
 
+    categories = ['Class/Workshop', 'Concert', 'Fitness', 'Entertainment', 'Food', 'Social', 'Trade show', 'Seminar', 'Conference', 'Party']
+
+    for c in categories:
+        category = Category.objects.get_or_create(Name=c)
+        print("Category added: " + "'" + c + "'")
+
     for u in superusers:
         user = User.objects.create_superuser(username=u['username'], email=u['email'], password=u['password'], first_name=u['first_name'], last_name=u['last_name'])
-        print("Superuser created: " + u['username'])
+        print("Superuser added: " + "'" + u['username'] + "'")
 
     for u in users:
         user = User.objects.create_user(username=u['username'], email=u['email'], password=u['password'], first_name=u['first_name'], last_name=u['last_name'])
-        print("User created: " + u['username'])
+        print("User added: " + "'" + u['username'] + "'")
 
 if __name__ == '__main__':
     print('Initialising population script...')
