@@ -71,6 +71,29 @@ a.event-link {
 }
 
 /*
+  Make event cards more consistent.
+*/
+.card-img-top {
+  width: 100%;
+  height: 12vw;
+  object-fit: cover;
+}
+
+.manage-event-box {
+  padding-top: 1vw;
+}
+
+.manage-event-heading {
+  color: #364f6b;
+  padding-bottom: 1vw;
+}
+
+.addedit-event-heading {
+  color: #364f6b;
+  padding-top: 1vw;
+}
+
+/*
     Event image popup
 */
 

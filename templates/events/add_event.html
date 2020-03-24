@@ -22,6 +22,7 @@
     {% if user.is_authenticated %}
         <div class="row">
             <form role="form" id="event_form" method="post" enctype="multipart/form-data" action="{% url 'events:add_event' %}">
+                <h2 class="addedit-event-heading">Add event</h2>
                 {% csrf_token %}
                 {% for hidden in form.hidden_fields %}
                     {{ hidden }}

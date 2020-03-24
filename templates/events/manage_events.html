@@ -11,26 +11,28 @@
 {% endblock %}
 
 {% block body_block %}
-    <!-- Temp -->
-    <div class="container justify-content-center event-card-box">
-        <div class="row">
-            {% for event in events_list %}
-            <div class="col-sm-4 mb-5">
-                <div class="card">
-                    <img class="card-img-top" src="{{ event.Picture.url }}" alt="Event thumbnail">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <a href="{% url 'events:edit_event' id=event.EventID %}">
-                                {{ event.EventName }}
-                            </a>
-                        </h5>
-                    </div>
-                    <div class="card-footer">
-                        <small class="text-muted">{{ event.DateTime }}</small>
-                    </div>
-                  </div>
-            </div>
-            {% endfor %}
-          </div>
+    <div class="manage-event-box">
+        <div class="container justify-content-center event-card-box">
+            <h2 class="manage-event-heading">Manage events</h2>
+            <div class="row">
+                {% for event in events_list %}
+                <div class="col-sm-4 mb-5">
+                    <div class="card">
+                        <img class="card-img-top" src="{{ event.Picture.url }}" alt="Event thumbnail">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="{% url 'events:edit_event' id=event.EventID %}">
+                                    {{ event.EventName }}
+                                </a>
+                            </h5>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">{{ event.DateTime }}</small>
+                        </div>
+                      </div>
+                </div>
+                {% endfor %}
+              </div>
+        </div>
     </div>
 {% endblock %}

@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
 
     <script src="https://cdn.jsdelivr.net/npm/places.js@1.18.1"></script>
+
+    <script src="{% static '/js/datetimepicker.js' %}"></script>
 {% endblock %}
 
 {% block body_block %}
@@ -20,6 +22,7 @@
     {% if user.is_authenticated %}
         <div class="row">
             <form role="form" id="event_form" method="post" enctype="multipart/form-data" action="{% url 'events:edit_event' id=id %}">
+                <h2 class="addedit-event-heading">Edit event</h2>
                 {% csrf_token %}
                 {% for hidden in form.hidden_fields %}
                     {{ hidden }}
@@ -40,15 +43,8 @@
                         {{ field }}<br />
                     {% endif %}
                 {% endfor %}
-                <script>
-                    $(function () {
-                    $("#datetimepicker1").datetimepicker({
-                        format: 'DD/MM/YYYY HH:mm',
-                    });
-                    });
-                </script>
                 <br/>
-                <button class="btn btn-primary" type="submit" name="submit">Edit Event</button>
+                <button class="btn btn-primary" type="submit" name="submit">Save changes</button>
                 <div class="p-5"></div>
                 <script src="{% static '/js/address_autocomplete.js' %}"></script>
             </form>
