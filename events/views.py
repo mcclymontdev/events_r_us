@@ -212,3 +212,16 @@ def edit_event(request, id):
             return redirect('events:show_event', id=id, event_slug=org_event.slug)
 
     return render(request, 'events/edit_event.html', {'form': form, 'id':id})
+
+def delete_event(request, id):
+    context_dict = {}
+
+    try:
+        event = Event.objects.get(EventID=id, UserID=request.user)
+        context_dict['event'] = event
+        event.delete()
+        context_dict['status'] = 1
+    except:
+        context_dict['status'] = 2
+
+    return render(request, 'events/delete_status.html', context_dict)

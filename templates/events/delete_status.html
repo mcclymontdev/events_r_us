@@ -1,0 +1,19 @@
+{% extends 'events/base.html' %}
+{% load static %}
+
+{% block title_block %}
+    Event deletion
+{% endblock %}
+
+{% block head_block %}
+{% endblock %}
+
+{% block body_block %}
+<div class="container">
+    {% if status == 1 %}
+        <p>{{ event.EventName }} deleted</p>
+    {% elif status == 2 %}
+        <p>Event not found</p>
+    {% endif %}
+</div>
+{% endblock %}
