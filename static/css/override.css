@@ -97,6 +97,11 @@ a.event-link {
   margin-bottom: 1vw;
 }
 
+.bold-light-colour {
+  color: #3fc1c9;
+  font-weight: bold;
+}
+
 /*
     Event image popup
 */

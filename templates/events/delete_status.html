@@ -9,11 +9,16 @@
 {% endblock %}
 
 {% block body_block %}
-<div class="container">
+<div class="container manage-event-box">
     {% if status == 1 %}
-        <p>{{ event.EventName }} deleted</p>
+    <div class="alert alert-success" role="alert">
+        <span class="font-weight-bold">{{ event.EventName }}</span> deleted successfully!
+    </div>
     {% elif status == 2 %}
-        <p>Event not found</p>
+    <div class="alert alert-danger" role="alert">
+        The specified event does not exist or has already been deleted!
+    </div>
     {% endif %}
+    <a type="button" href="{% url 'events:manage_events' %}" class="btn btn-light">Return to events<a>
 </div>
 {% endblock %}
