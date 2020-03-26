@@ -51,6 +51,27 @@ class Event(models.Model):
     def __str__(self):
         return self.EventName
 
+class EventRatings(models.Model):
+    RatingChoices = [
+        (0.5, '0.5'),
+        (1,'1'),
+        (1.5,'1.5'),
+        (2,'2'),
+        (2.5,'2.5'),
+        (3,'3'),
+        (3.5, '3.5'),
+        (4,'4'),
+        (4.5,'4.5'),
+        (5,'5')
+    ]
+
+    Rating = models.DecimalField(choices=RatingChoices, max_digits=2, decimal_places=1)
+    UserID = models.ForeignKey(User, on_delete=models.CASCADE)
+    EventID = models.ForeignKey(Event, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ("UserID", "EventID")
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 

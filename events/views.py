@@ -5,9 +5,9 @@ from django.contrib.auth import login as auth_login
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django_registration.views import RegistrationView
-from events.forms import UserForm, UserProfileForm, EventForm, SearchForm
+from events.forms import UserForm, UserProfileForm, EventForm, SearchForm, EventRatingsForm
 from events.helpers import haversine
-from .models import User, Event, Category
+from .models import User, Event, Category, EventRatings
 
 def index(request):
     form = SearchForm()
@@ -179,12 +179,30 @@ def add_event(request):
     return render(request, 'events/add_event.html', {'form': form})
 
 def show_event(request, id, event_slug):
+    form = EventRatingsForm()
+
     context_dict = {}
     try:
         context_dict['event'] = Event.objects.get(EventID=id, slug=event_slug)
+        context_dict['form'] = form
+
+        if request.method == 'POST':
+            form = EventRatingsForm(request.POST)
+            print(form.data)
+            if form.is_valid():
+                print(form.cleaned_data)
+                eventrating = EventRatings(
+                    UserID=request.user, 
+                    EventID=context_dict['event'],
+                    Rating=form.cleaned_data['rating']
+                    )
+                eventrating.save()
+            else:
+                print(form.errors)
 
     except Event.DoesNotExist:
         context_dict['event'] = None
+        context_dict['form'] = None
 
     return render(request, 'events/event.html', context=context_dict)
 
@@ -202,7 +220,6 @@ def manage_events(request):
     return render(request, 'events/manage_events.html', context=context_dict)
 
 def edit_event(request, id):
-    
     org_event = Event.objects.get(EventID=id, UserID=request.user)
     form = EventForm(request.POST or None, instance=org_event, initial={'Latitude':org_event.Latitude, 'Longitude':org_event.Longitude, 'Picture':org_event.Picture})
 

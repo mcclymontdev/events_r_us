@@ -2,7 +2,7 @@
 from django_registration.forms import RegistrationForm
 from django.contrib.auth.models import User
 from events.models import User
-from events.models import UserProfile, Event, Category
+from events.models import UserProfile, Event, Category, EventRatings
 from django import forms
 
 class UserForm(forms.ModelForm):
@@ -60,3 +60,10 @@ class SearchForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)
         self.fields['category'].empty_label = "Any"
+
+class EventRatingsForm(forms.Form):
+    rating = forms.CharField(widget=forms.RadioSelect(choices=EventRatings.RatingChoices))
+
+    class Meta:
+        model = EventRatings
+        fields = ("rating")

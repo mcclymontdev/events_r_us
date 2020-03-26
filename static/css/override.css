@@ -166,21 +166,62 @@ a.event-link {
     border-color: #364f6b;
   }
   
-  .btn-primary:hover {
-    color: #fff;
-    background-color: #3fc1c9;
-    border-color: #3fc1c9;
-  }
-  
-  .btn-primary:focus, .btn-primary.focus {
-    color: #fff;
-    background-color: #3fc1c9;
-    border-color: #3fc1c9;
-    box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
-  }
-  
-  .btn-primary.disabled, .btn-primary:disabled {
-    color: #fff;
-    background-color: #3fc1c9;
-    border-color: #3fc1c9;
-  }
+.btn-primary:hover {
+  color: #fff;
+  background-color: #3fc1c9;
+  border-color: #3fc1c9;
+}
+
+.btn-primary:focus, .btn-primary.focus {
+  color: #fff;
+  background-color: #3fc1c9;
+  border-color: #3fc1c9;
+  box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
+}
+
+.btn-primary.disabled, .btn-primary:disabled {
+  color: #fff;
+  background-color: #3fc1c9;
+  border-color: #3fc1c9;
+}
+
+/* 
+  Star Rating
+*/
+
+@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+
+.rating { 
+  border: none;
+  float: left;
+}
+
+.rating > input { display: none; } 
+.rating > label:before { 
+  margin: 5px;
+  font-size: 1.25em;
+  font-family: FontAwesome;
+  display: inline-block;
+  content: "\f005";
+}
+
+.rating > .half:before { 
+  content: "\f089";
+  position: absolute;
+}
+
+.rating > label { 
+  color: #ddd; 
+ float: right; 
+}
+
+/***** CSS Magic to Highlight Stars on Hover *****/
+
+.rating > input:checked ~ label, /* show gold star when clicked */
+.rating:not(:checked) > label:hover, /* hover current star */
+.rating:not(:checked) > label:hover ~ label { color: #FFD700;  } /* hover previous stars in list */
+
+.rating > input:checked + label:hover, /* hover current star when changing rating */
+.rating > input:checked ~ label:hover,
+.rating > label:hover ~ input:checked ~ label, /* lighten current selection */
+.rating > input:checked ~ label:hover ~ label { color: #FFED85;  } 

@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title_block %}
-    Add an event
+  {{ event.EventName }}
 {% endblock %}
 
 {% block head_block %}
@@ -66,10 +66,27 @@
               TODO: Rating system
             -->
             <div class="card-footer">
-                <button type="button" class="btn btn-outline-primary">
-                    <i class="fa fa-heart" aria-hidden="true"></i>
-                    Rate
-                </button>
+                <form role="form" id="rating_form" method="post" enctype="multipart/form-data" action="{% url 'events:show_event' id=event.EventID event_slug=event.slug %}">
+                    {% csrf_token %}
+                    
+                    <fieldset class="rating">
+                      {{ form.rating.9.tag }}<label class ="full" for="{{ form.rating.9.id_for_label }}" title="5 stars"></label>
+                      {{ form.rating.8.tag }}<label class="half" for="{{ form.rating.8.id_for_label }}" title="4.5 stars"></label>
+                      {{ form.rating.7.tag }}<label class ="full" for="{{ form.rating.7.id_for_label }}" title="4 stars"></label>
+                      {{ form.rating.6.tag }}<label class="half" for="{{ form.rating.6.id_for_label }}" title="3.5 stars"></label>
+                      {{ form.rating.5.tag }}<label class ="full" for="{{ form.rating.5.id_for_label }}" title="3 stars"></label>
+                      {{ form.rating.4.tag }}<label class="half" for="{{ form.rating.4.id_for_label }}" title="2.5 stars"></label>
+                      {{ form.rating.3.tag }}<label class ="full" for="{{ form.rating.3.id_for_label }}" title="2 stars"></label>
+                      {{ form.rating.2.tag }}<label class="half" for="{{ form.rating.2.id_for_label }}" title="1.5 stars"></label>
+                      {{ form.rating.1.tag }}<label class ="full" for="{{ form.rating.1.id_for_label }}" title="1 star"></label>
+                      {{ form.rating.0.tag }}<label class="half" for="{{ form.rating.0.id_for_label }}" title="0.5 stars"></label>
+                    </fieldset>
+                    <p>{{ form.rating.errors }}</p>
+
+                    <button class="btn btn-outline-primary" type="submit" name="submit">
+                      Submit
+                    </button>
+                </form>
             </div>
           </div>
       </div>
