@@ -198,8 +198,8 @@ a.event-link {
 
 .rating > input { display: none; } 
 .rating > label:before { 
-  margin: 5px;
-  font-size: 1.25em;
+  margin: 5px 5px 0px 0px;
+  font-size: 1.55em;
   font-family: FontAwesome;
   display: inline-block;
   content: "\f005";
@@ -211,8 +211,9 @@ a.event-link {
 }
 
 .rating > label { 
+  margin: 0;
   color: #ddd; 
- float: right; 
+  float: right; 
 }
 
 /***** CSS Magic to Highlight Stars on Hover *****/
@@ -225,3 +226,16 @@ a.event-link {
 .rating > input:checked ~ label:hover,
 .rating > label:hover ~ input:checked ~ label, /* lighten current selection */
 .rating > input:checked ~ label:hover ~ label { color: #87dce0;  } 
+
+.rating-head {
+  margin-bottom: 0em;
+}
+
+#small-max-rating {
+  font-size: medium;
+  color: grey;
+}
+
+.event-container {
+  padding-bottom: 2em;
+}

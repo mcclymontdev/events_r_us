@@ -197,8 +197,10 @@ def show_event(request, id, event_slug):
             for r in all_ratings:
                 total_rating += r.Rating
             context_dict['total_rating'] = total_rating/num_of_ratings
+            context_dict['num_of_ratings'] = num_of_ratings
         else:
             context_dict['total_rating'] = 0
+            context_dict['num_of_ratings'] = 0
 
     except Event.DoesNotExist:
         context_dict['event'] = None
