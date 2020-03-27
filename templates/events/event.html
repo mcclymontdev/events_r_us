@@ -2,15 +2,16 @@
 {% load static %}
 
 {% block title_block %}
-    Add an event
+  {{ event.EventName }}
 {% endblock %}
 
 {% block head_block %}
+    <script src="{% static '/js/submit_rating.js' %}"></script>
     <script src="{% static '/js/image_popup.js' %}"></script>
 {% endblock %}
 
 {% block body_block %}
-<div class="container">
+<div class="container event-container">
     <div id="event-header-image" class="height-crop event-image-shadow">
         <img src="{{ event.Picture.url }}" class="img-fluid"  id="event-image" alt="Event image">
     </div>
@@ -66,10 +67,32 @@
               TODO: Rating system
             -->
             <div class="card-footer">
-                <button type="button" class="btn btn-outline-primary">
-                    <i class="fa fa-heart" aria-hidden="true"></i>
-                    Rate
-                </button>
+                <form role="form" name="rating_form" id="rating_form" method="post" enctype="multipart/form-data" action="{% url 'events:show_event' id=event.EventID event_slug=event.slug %}">
+                    {% csrf_token %}
+                    <p class="card-text rating-head">Your rating:</p>
+                    <fieldset class="rating" name="rating_set">
+                      {{ form.rating.9.tag }}<label class ="full" for="{{ form.rating.9.id_for_label }}" title="5 stars"></label>
+                      {{ form.rating.8.tag }}<label class="half" for="{{ form.rating.8.id_for_label }}" title="4.5 stars"></label>
+                      {{ form.rating.7.tag }}<label class ="full" for="{{ form.rating.7.id_for_label }}" title="4 stars"></label>
+                      {{ form.rating.6.tag }}<label class="half" for="{{ form.rating.6.id_for_label }}" title="3.5 stars"></label>
+                      {{ form.rating.5.tag }}<label class ="full" for="{{ form.rating.5.id_for_label }}" title="3 stars"></label>
+                      {{ form.rating.4.tag }}<label class="half" for="{{ form.rating.4.id_for_label }}" title="2.5 stars"></label>
+                      {{ form.rating.3.tag }}<label class ="full" for="{{ form.rating.3.id_for_label }}" title="2 stars"></label>
+                      {{ form.rating.2.tag }}<label class="half" for="{{ form.rating.2.id_for_label }}" title="1.5 stars"></label>
+                      {{ form.rating.1.tag }}<label class ="full" for="{{ form.rating.1.id_for_label }}" title="1 star"></label>
+                      {{ form.rating.0.tag }}<label class="half" for="{{ form.rating.0.id_for_label }}" title="0.5 stars"></label>
+                    </fieldset>
+                    {{ form.rating.errors }}
+                    <!-- Temp total rating display -->
+                </form>
+            </div>
+            <div class="card-footer">
+              {% if num_of_ratings > 0 %}
+                <h4>{{ total_rating }}<span id="small-max-rating">/5.0</span></h4>
+                <p class="card-text">Average rating from {{ num_of_ratings }} user(s)</p>
+              {% else %}
+                <p class="card-text">No users have rated this event yet.</p>
+              {% endif %}
             </div>
           </div>
       </div>

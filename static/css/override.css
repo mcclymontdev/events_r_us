@@ -166,21 +166,76 @@ a.event-link {
     border-color: #364f6b;
   }
   
-  .btn-primary:hover {
-    color: #fff;
-    background-color: #3fc1c9;
-    border-color: #3fc1c9;
-  }
-  
-  .btn-primary:focus, .btn-primary.focus {
-    color: #fff;
-    background-color: #3fc1c9;
-    border-color: #3fc1c9;
-    box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
-  }
-  
-  .btn-primary.disabled, .btn-primary:disabled {
-    color: #fff;
-    background-color: #3fc1c9;
-    border-color: #3fc1c9;
-  }
+.btn-primary:hover {
+  color: #fff;
+  background-color: #3fc1c9;
+  border-color: #3fc1c9;
+}
+
+.btn-primary:focus, .btn-primary.focus {
+  color: #fff;
+  background-color: #3fc1c9;
+  border-color: #3fc1c9;
+  box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
+}
+
+.btn-primary.disabled, .btn-primary:disabled {
+  color: #fff;
+  background-color: #3fc1c9;
+  border-color: #3fc1c9;
+}
+
+/* 
+  Star Rating
+*/
+
+@import url(./font-awesome.min.css);
+
+.rating { 
+  border: none;
+  float: left;
+}
+
+.rating > input { display: none; } 
+.rating > label:before { 
+  margin: 5px 5px 0px 0px;
+  font-size: 1.55em;
+  font-family: FontAwesome;
+  display: inline-block;
+  content: "\f005";
+}
+
+.rating > .half:before { 
+  content: "\f089";
+  position: absolute;
+}
+
+.rating > label { 
+  margin: 0;
+  color: #ddd; 
+  float: right; 
+}
+
+/***** CSS Magic to Highlight Stars on Hover *****/
+
+.rating > input:checked ~ label, /* show gold star when clicked */
+.rating:not(:checked) > label:hover, /* hover current star */
+.rating:not(:checked) > label:hover ~ label { color: #29bcc4;  } /* hover previous stars in list */
+
+.rating > input:checked + label:hover, /* hover current star when changing rating */
+.rating > input:checked ~ label:hover,
+.rating > label:hover ~ input:checked ~ label, /* lighten current selection */
+.rating > input:checked ~ label:hover ~ label { color: #87dce0;  } 
+
+.rating-head {
+  margin-bottom: 0em;
+}
+
+#small-max-rating {
+  font-size: medium;
+  color: grey;
+}
+
+.event-container {
+  padding-bottom: 2em;
+}

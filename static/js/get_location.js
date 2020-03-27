@@ -1,6 +1,3 @@
-var get_location_button
-var search_form
-
 $(function() {
     get_location_button = document.getElementById("get_location_button");
     search_form = document.getElementById("search_form");
