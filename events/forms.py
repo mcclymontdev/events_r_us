@@ -61,9 +61,9 @@ class SearchForm(forms.Form):
         super(SearchForm, self).__init__(*args, **kwargs)
         self.fields['category'].empty_label = "Any"
 
-class EventRatingsForm(forms.Form):
-    rating = forms.CharField(widget=forms.RadioSelect(choices=EventRatings.RatingChoices))
+class EventRatingsForm(forms.ModelForm):
+    rating = forms.DecimalField(widget=forms.RadioSelect(choices=EventRatings.RatingChoices), max_digits=2, decimal_places=1)
 
     class Meta:
         model = EventRatings
-        fields = ("rating")
+        fields = ('rating',)

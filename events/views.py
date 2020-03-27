@@ -179,7 +179,12 @@ def add_event(request):
     return render(request, 'events/add_event.html', {'form': form})
 
 def show_event(request, id, event_slug):
-    form = EventRatingsForm()
+    org_eventrating = None
+    try:
+        org_eventrating = EventRatings.objects.get(EventID=id, UserID=request.user)
+        form = EventRatingsForm(request.POST or None, instance=org_eventrating, initial={'rating':org_eventrating.Rating})
+    except:
+         form = EventRatingsForm()
 
     context_dict = {}
     try:
@@ -190,13 +195,18 @@ def show_event(request, id, event_slug):
             form = EventRatingsForm(request.POST)
             print(form.data)
             if form.is_valid():
-                print(form.cleaned_data)
-                eventrating = EventRatings(
-                    UserID=request.user, 
-                    EventID=context_dict['event'],
-                    Rating=form.cleaned_data['rating']
-                    )
-                eventrating.save()
+                try:
+                    eventrating = EventRatings(
+                        UserID=request.user, 
+                        EventID=context_dict['event'],
+                        Rating=form.cleaned_data['rating']
+                        )
+                    eventrating.save()
+                    print("new save")
+                except:
+                    org_eventrating.Rating = form.cleaned_data['rating']
+                    org_eventrating.save()
+                    print("org save")
             else:
                 print(form.errors)
 
