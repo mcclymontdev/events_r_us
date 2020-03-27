@@ -82,10 +82,9 @@
                       {{ form.rating.0.tag }}<label class="half" for="{{ form.rating.0.id_for_label }}" title="0.5 stars"></label>
                     </fieldset>
                     <p>{{ form.rating.errors }}</p>
-
-                    <button class="btn btn-outline-primary" type="submit" name="submit">
-                      Submit
-                    </button>
+                    <button class="btn btn-outline-primary" type="submit" name="submit">Submit</button>
+                    <!-- Temp total rating display -->
+                    {{ total_rating }}
                 </form>
             </div>
           </div>

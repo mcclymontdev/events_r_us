@@ -14,20 +14,15 @@ def index(request):
     return render(request, 'events/index.html', {'form' : form})
 
 def signup(request):
-
 	registered = False
 	
 	if request.method == 'POST':
-		
 		user_form = UserForm(request.POST)
 		profile_form = UserProfileForm(request.POST)
-		
+
 		if user_form.is_valid() and profile_form.is_valid():
-		
 			user = user_form.save()
-			
 			user.set_password(user.password)
-			
 			user.save()
 			
 			profile = profile_form.save(commit=False)
@@ -35,53 +30,34 @@ def signup(request):
 			profile.save()
 			
 			registered = True
-			
 		else:
-			
 			print(user_form.errors, profile_form.errors)
-			
 	else:
-		
 		user_form = UserForm()
 		profile_form = UserProfileForm()
-		
 	return render(request, 'events/sign-up.html', context = {'user_form': user_form, 'profile_form' : profile_form, 'registered':registered})
 
 def user_logout(request):
-    
     logout(request)
-    
     return redirect(reverse('events:index'))
     
 def login(request):
-    
     if request.method == 'POST':
-        
         username = request.POST.get('username')
-        
         password = request.POST.get('password')
         
         user = authenticate(username=username, password=password)
         
         if user:
-            
             if user.is_active:
-            
                 auth_login(request, user)
-                
                 return redirect(reverse('events:index'))
-                
             else:
-            
                 return HttpResponse("Your events account is disabled")
-                
         else:
-        
             print(f"Invalid Login details: {username}, {password}")
             return HttpResponse ("Invalid login credentials")
-            
     else:
-    
         return render(request, 'events/login.html')
 
 def search(request):
@@ -179,6 +155,7 @@ def add_event(request):
     return render(request, 'events/add_event.html', {'form': form})
 
 def show_event(request, id, event_slug):
+    # Setting up form
     org_eventrating = None
     try:
         org_eventrating = EventRatings.objects.get(EventID=id, UserID=request.user)
@@ -187,6 +164,8 @@ def show_event(request, id, event_slug):
          form = EventRatingsForm()
 
     context_dict = {}
+
+    # Form handling
     try:
         context_dict['event'] = Event.objects.get(EventID=id, slug=event_slug)
         context_dict['form'] = form
@@ -202,13 +181,21 @@ def show_event(request, id, event_slug):
                         Rating=form.cleaned_data['rating']
                         )
                     eventrating.save()
-                    print("new save")
                 except:
                     org_eventrating.Rating = form.cleaned_data['rating']
                     org_eventrating.save()
-                    print("org save")
             else:
                 print(form.errors)
+
+        # Calculating total event rating
+        all_ratings = EventRatings.objects.filter(EventID=context_dict['event'])
+        num_of_ratings = all_ratings.count()
+        total_rating = 0
+        for r in all_ratings:
+            total_rating += r.Rating
+        total_rating = total_rating/num_of_ratings
+        context_dict['total_rating'] = total_rating
+        print(context_dict['total_rating'])
 
     except Event.DoesNotExist:
         context_dict['event'] = None
