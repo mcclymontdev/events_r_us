@@ -159,20 +159,19 @@ def show_event(request, id, event_slug):
     org_eventrating = None
     try:
         org_eventrating = EventRatings.objects.get(EventID=id, UserID=request.user)
-        form = EventRatingsForm(request.POST or None, instance=org_eventrating, initial={'rating':org_eventrating.Rating})
+        form = EventRatingsForm(request.POST or None, initial={'rating':org_eventrating.Rating})
+        print(form.initial)
     except:
-         form = EventRatingsForm()
+         form = EventRatingsForm(request.POST or None)
+         print("New form")
 
     context_dict = {}
 
     # Form handling
     try:
-        context_dict['event'] = Event.objects.get(EventID=id, slug=event_slug)
         context_dict['form'] = form
-
+        context_dict['event'] = Event.objects.get(EventID=id, slug=event_slug)
         if request.method == 'POST':
-            form = EventRatingsForm(request.POST)
-            print(form.data)
             if form.is_valid():
                 try:
                     eventrating = EventRatings(
@@ -180,6 +179,7 @@ def show_event(request, id, event_slug):
                         EventID=context_dict['event'],
                         Rating=form.cleaned_data['rating']
                         )
+                    print(eventrating.Rating)
                     eventrating.save()
                 except:
                     org_eventrating.Rating = form.cleaned_data['rating']
@@ -187,15 +187,18 @@ def show_event(request, id, event_slug):
             else:
                 print(form.errors)
 
+
+
         # Calculating total event rating
         all_ratings = EventRatings.objects.filter(EventID=context_dict['event'])
         num_of_ratings = all_ratings.count()
-        total_rating = 0
-        for r in all_ratings:
-            total_rating += r.Rating
-        total_rating = total_rating/num_of_ratings
-        context_dict['total_rating'] = total_rating
-        print(context_dict['total_rating'])
+        if num_of_ratings > 0:                   
+            total_rating = 0
+            for r in all_ratings:
+                total_rating += r.Rating
+            context_dict['total_rating'] = total_rating/num_of_ratings
+        else:
+            context_dict['total_rating'] = 0
 
     except Event.DoesNotExist:
         context_dict['event'] = None

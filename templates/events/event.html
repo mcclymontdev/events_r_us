@@ -66,6 +66,8 @@
               TODO: Rating system
             -->
             <div class="card-footer">
+              <h5 class="card-title">
+                Rating</h5>
                 <form role="form" id="rating_form" method="post" enctype="multipart/form-data" action="{% url 'events:show_event' id=event.EventID event_slug=event.slug %}">
                     {% csrf_token %}
                     
