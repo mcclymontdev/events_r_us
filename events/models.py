@@ -18,7 +18,7 @@ class Category(models.Model):
 
 class Event(models.Model):
     NAME_MAX_LENGTH = 100
-    DESCRIPTION_MAX_LENGTH = 500
+    DESCRIPTION_MAX_LENGTH = 1250
     ADDRESS_MAX_LENGTH = 100
 
     EventID = models.AutoField(primary_key=True)
@@ -50,6 +50,27 @@ class Event(models.Model):
 
     def __str__(self):
         return self.EventName
+
+class EventRatings(models.Model):
+    RatingChoices = [
+        (0.5, 0.5),
+        (1.0,1.0),
+        (1.5,1.5),
+        (2.0,2.0),
+        (2.5,2.5),
+        (3.0,3.0),
+        (3.5, 3.5),
+        (4.0,4.0),
+        (4.5,4.5),
+        (5.0,5.0)
+    ]
+
+    Rating = models.DecimalField(choices=RatingChoices, max_digits=2, decimal_places=1)
+    UserID = models.ForeignKey(User, on_delete=models.CASCADE)
+    EventID = models.ForeignKey(Event, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ("UserID", "EventID")
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

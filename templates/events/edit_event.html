@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title_block %}
-    Add an event
+    Edit event
 {% endblock %}
 
 {% block head_block %}
@@ -21,8 +21,8 @@
 <div class="container">
     {% if user.is_authenticated %}
         <div class="row">
-            <form role="form" id="event_form" method="post" enctype="multipart/form-data" action="{% url 'events:add_event' %}">
-                <h2 class="addedit-event-heading">Add event</h2>
+            <form role="form" id="event_form" method="post" enctype="multipart/form-data" action="{% url 'events:edit_event' id=id %}">
+                <h2 class="addedit-event-heading">Edit event</h2>
                 {% csrf_token %}
                 {% for hidden in form.hidden_fields %}
                     {{ hidden }}
@@ -44,14 +44,14 @@
                     {% endif %}
                 {% endfor %}
                 <br/>
-                <button class="btn btn-primary" type="submit" name="submit">Create Event</button>
+                <button class="btn btn-primary" type="submit" name="submit">Save changes</button>
                 <div class="p-5"></div>
                 <script src="{% static '/js/address_autocomplete.js' %}"></script>
             </form>
         </div>
     {% else %}
         <div class="row">
-            <p>You must be logged in to add an event.</p>
+            <p>You must be logged in to edit an event.</p>
         </div>
     {% endif %}
 </div>
