@@ -1,10 +1,27 @@
 {% extends "events/base.html" %}
+{% load static %}
+{% load add_attr %}
+
+{% block head_block %}
+    <script src="{% static '/js/tooltips.js' %}"></script>
+{% endblock %}
 
 {% block body_block %}
-<form method="post" action=".">
-  {% csrf_token %}
-  {{ form.as_p }}
+<div class="d-flex justify-content-center">
+  <form method="post" action="." id="signup-login-form">
+    {% csrf_token %}
+    {% for field in form.visible_fields %}
+    <div class="form-group" data-toggle="tooltip" data-html="true" title="{{ field.help_text }}" data-placement="right">
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field|add_attr:"class:form-control"}}
+      {{ field.errors }}
+    </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Sign up</button>
 
-  <input type="submit"/>
-</form>
+    <hr class="my-4">
+    <p>Already have an account?</p>
+    <a class="btn btn-secondary" id="signin">Sign in</a>
+  </form>
+</div>
 {% endblock %}

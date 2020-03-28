@@ -39,8 +39,12 @@
 }
 
 #signup-login-form{
-  width: 15%;
+  width: 20em;
   padding-top: 50px;
+}
+
+#signin {
+  color: white;
 }
 
 .refine-search{
