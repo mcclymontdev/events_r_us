@@ -72,6 +72,10 @@ class EventRatings(models.Model):
     class Meta:
         unique_together = ("UserID", "EventID")
 
+    class Meta:
+        verbose_name = 'Event ratings'
+        verbose_name_plural = 'Event ratings'
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
