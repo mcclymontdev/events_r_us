@@ -243,3 +243,7 @@ a.event-link {
 .event-container {
   padding-bottom: 2em;
 }
+
+#map-container {
+  height: 18em;
+};
