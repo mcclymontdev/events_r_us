@@ -2,7 +2,7 @@
 from django_registration.forms import RegistrationForm
 from django.contrib.auth.models import User
 from events.models import User
-from events.models import UserProfile, Event, Category, EventRatings
+from events.models import UserProfile, Event, Category, EventRatings, Comment
 from django import forms
 
 class UserForm(forms.ModelForm):
@@ -67,3 +67,8 @@ class EventRatingsForm(forms.ModelForm):
     class Meta:
         model = EventRatings
         fields = ('rating',)
+        
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('Comment',)

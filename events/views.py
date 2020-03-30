@@ -5,9 +5,9 @@ from django.contrib.auth import login as auth_login
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django_registration.views import RegistrationView
-from events.forms import UserForm, UserProfileForm, EventForm, SearchForm, EventRatingsForm
+from events.forms import UserForm, UserProfileForm, EventForm, SearchForm, EventRatingsForm, CommentForm
 from events.helpers import haversine
-from .models import User, Event, Category, EventRatings
+from .models import User, Event, Category, EventRatings, Comment
 
 def index(request):
     form = SearchForm()
@@ -159,33 +159,41 @@ def show_event(request, id, event_slug):
     org_eventrating = None
     try:
         org_eventrating = EventRatings.objects.get(EventID=id, UserID=request.user)
-        form = EventRatingsForm(request.POST or None, initial={'rating':org_eventrating.Rating})
+        ratingsForm = EventRatingsForm(request.POST or None, initial={'rating':org_eventrating.Rating})
         print(form.initial)
     except:
-         form = EventRatingsForm(request.POST or None)
+         ratingsForm = EventRatingsForm(request.POST or None)
          print("New form")
 
     context_dict = {}
+    
+    #get comments
+    try:
+        comments = Comment.objects.filter(EventID = id)
+        context_dict['comments'] = comments
+    except:
+        comments = []
+        context_dict['comments'] = None
 
     # Form handling
     try:
-        context_dict['form'] = form
+        context_dict['form'] = ratingsForm
         context_dict['event'] = Event.objects.get(EventID=id, slug=event_slug)
         if request.method == 'POST':
-            if form.is_valid():
+            if ratingsForm.is_valid():
                 try:
                     eventrating = EventRatings(
                         UserID=request.user, 
                         EventID=context_dict['event'],
-                        Rating=form.cleaned_data['rating']
+                        Rating=ratingsForm.cleaned_data['rating']
                         )
                     print(eventrating.Rating)
                     eventrating.save()
                 except:
-                    org_eventrating.Rating = form.cleaned_data['rating']
+                    org_eventrating.Rating = ratingsForm.cleaned_data['rating']
                     org_eventrating.save()
             else:
-                print(form.errors)
+                print(ratingsForm.errors)
 
 
 
@@ -205,6 +213,36 @@ def show_event(request, id, event_slug):
     except Event.DoesNotExist:
         context_dict['event'] = None
         context_dict['form'] = None
+        context_dict['comments'] = None
+    
+    try:
+        comments = Comment.objects.filter(EventID = id)
+        context_dict['comments'] = comments
+    except:
+        comments = []
+        context_dict['comments'] = None
+        
+    new_comment = None
+    
+    if request.method == 'POST':
+        if not request.user.is_authenticated:
+            return redirect('/login')
+            commentForm = CommentForm(data = request.POST)
+            if commentForm.is_valid():
+                # Create the Comment object
+                new_comment = commentForm.save(commit = False)
+                # Assign the comment to the event
+                new_comment.EventID = id
+                # Give a local ID to the comment
+                new_comment.CommentID = len(comments) + 1
+                # Assign comment to logged in user TODO
+                new_comment.User = request.user.username
+                # Save to database
+                new_comment.save()
+                # add to comments
+                comments.append(new_comment)
+    else:
+        commentForm = CommentForm()
 
     return render(request, 'events/event.html', context=context_dict)
 
