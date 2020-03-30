@@ -36,6 +36,17 @@ def populate():
         user = User.objects.create_user(username=u['username'], email=u['email'], password=u['password'], first_name=u['first_name'], last_name=u['last_name'])
         print("User added: " + "'" + u['username'] + "'")
 
+    # Example event population script
+    events = [
+        {'username':'Eric1337_Dance', 'EventName':'Dance School', 'Description':'Example description...', 'Picture':'whatever.png', 'Address':'53 Morrison St', 'Latitude':'55.853673', 'Longitude':'-4.268097', 'category':'Fitness','eventType':'Recurring'}
+    ]
+
+    for e in events:
+        User_obj = User.objects.get(username=e['username'])
+        category_obj = Category.objects.get(Name=e['category'])
+        event = Event.objects.create(UserID=User_obj, EventName=e['EventName'], Description=e['Description'], Picture=e['Picture'], Address=e['Address'], Latitude=e['Latitude'], Longitude=e['Longitude'], category=category_obj, eventType=e['eventType'])
+        print("Event added: " + "'" + e['EventName'] + "'")
+
 if __name__ == '__main__':
     print('Initialising population script...')
     populate()
