@@ -25,7 +25,7 @@ def populate():
     categories = ['Class/Workshop', 'Concert', 'Fitness', 'Entertainment', 'Food', 'Social', 'Trade show', 'Seminar', 'Conference', 'Party']
 
     for c in categories:
-        category = Category.objects.get_or_create(EventName=c)
+        category = Category.objects.get_or_create(Name=c)
         print("Category added: " + "'" + c + "'")
 
     for u in superusers:

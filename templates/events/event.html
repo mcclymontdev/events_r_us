@@ -37,32 +37,38 @@
         <!--
             TODO: Comment system :)
         -->
-        <div id="comment-section">
-			<h4>{{ comments.count }} comments</h4>
-			
-			{% for comment in comments %}
+		<div class="card-body">
+			<div id="comment-section">
+				<h4>{{ comments.count }} comments</h4>
+				
+				{% for comment in comments %}
 				<div class = "comments">
-				<p class = "font-weight-bold">
-					{{comment.UserID.username}}
-					<span class= "text-muted font-weight-normal">
-						{{comment.CreatedOn}}
-					</span>
-				</p>
-				{{comment.Comment | linebreaks }}
+					<p class = "font-weight-bold">
+						{{comment.UserID.username}}
+						<span class= "text-muted font-weight-normal">
+							{{comment.CreatedOn}}
+						</span>
+					</p>
+					{{comment.Comment | linebreaks }}
 				</div>
-			{% endfor %}
-			<div class="col-md-8 card mb-4  mt-3 ">
+				{% endfor %}
+				{% if user.is_authenticated %}
 				<div class="card-body">
 					<h5>Leave a comment</h5>
-					<form method="post" style="margin-top: 1.3em">
-						{{commentForm.as_p}}
+					<form method="post">
 						{% csrf_token %}
-						<button type="submit" class="btn btn-primary btn-lg">Submit</button>
+						{{commentForm.as_p}}
+						<input type="submit" value="Submit"> 
 					</form>
 				</div>
+				{% else %}
+				<div class="row">
+					<p>You must be logged in to comment.</p>
+				</div>
+				{% endif %}
 			</div>
         </div>
-      </div>
+		</div>
 
       <!--
         Sidebar area

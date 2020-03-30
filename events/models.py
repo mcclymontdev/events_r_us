@@ -86,10 +86,11 @@ class UserProfile(models.Model):
         return self.user.Username
 
 class Comment(models.Model):
+    COMMENT_MAX_LENGTH = 200
     CommentID = models.AutoField(primary_key=True)
     EventID = models.ForeignKey(Event, on_delete=models.CASCADE)
     UserID = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    Comment = models.CharField(max_length=200)
+    Comment = models.CharField(max_length = COMMENT_MAX_LENGTH)
     CreatedOn = models.DateTimeField(auto_now_add = True)
     #ParentCommentID = models.ForeignKey(Comments, on_delete=models.CASCADE)
     
@@ -99,6 +100,5 @@ class Comment(models.Model):
     class Meta:
         unique_together = ("CommentID", "EventID")
         
-        # validates the date ensuring it is not in past 
     def save(self, *args, **kwargs):
         super(Comment, self).save(*args, **kwargs)

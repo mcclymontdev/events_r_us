@@ -160,9 +160,11 @@ def show_event(request, id, event_slug):
     try:
         org_eventrating = EventRatings.objects.get(EventID=id, UserID=request.user)
         ratingsForm = EventRatingsForm(request.POST or None, initial={'rating':org_eventrating.Rating})
-        print(form.initial)
+        commentForm = CommentForm(data = request.POST)
+        print(ratingsForm.initial)
     except:
          ratingsForm = EventRatingsForm(request.POST or None)
+         commentForm = CommentForm(data = request.POST)
          print("New form")
 
     context_dict = {}
@@ -179,6 +181,7 @@ def show_event(request, id, event_slug):
     try:
         context_dict['form'] = ratingsForm
         context_dict['event'] = Event.objects.get(EventID=id, slug=event_slug)
+        context_dict['commentForm'] = commentForm
         if request.method == 'POST':
             if ratingsForm.is_valid():
                 try:
@@ -192,10 +195,21 @@ def show_event(request, id, event_slug):
                 except:
                     org_eventrating.Rating = ratingsForm.cleaned_data['rating']
                     org_eventrating.save()
+                    
+            elif commentForm.is_valid():
+                # Create the Comment object
+                new_comment = commentForm.save(commit = False)
+                # Assign the comment to the event
+                new_comment.EventID = context_dict['event']
+                # Give a local ID to the comment
+                new_comment.CommentID = len(comments) + 1
+                # Assign comment to logged in user
+                new_comment.UserID = request.user
+                # Save to database
+                new_comment.save()
             else:
                 print(ratingsForm.errors)
-
-
+                print(commentForm.errors)
 
         # Calculating total event rating
         all_ratings = EventRatings.objects.filter(EventID=context_dict['event'])
@@ -213,36 +227,16 @@ def show_event(request, id, event_slug):
     except Event.DoesNotExist:
         context_dict['event'] = None
         context_dict['form'] = None
+        context_dict['commentForm'] = None
         context_dict['comments'] = None
-    
-    try:
-        comments = Comment.objects.filter(EventID = id)
-        context_dict['comments'] = comments
-    except:
-        comments = []
-        context_dict['comments'] = None
-        
+
     new_comment = None
     
     if request.method == 'POST':
-        if not request.user.is_authenticated:
-            return redirect('/login')
-            commentForm = CommentForm(data = request.POST)
-            if commentForm.is_valid():
-                # Create the Comment object
-                new_comment = commentForm.save(commit = False)
-                # Assign the comment to the event
-                new_comment.EventID = id
-                # Give a local ID to the comment
-                new_comment.CommentID = len(comments) + 1
-                # Assign comment to logged in user TODO
-                new_comment.User = request.user.username
-                # Save to database
-                new_comment.save()
-                # add to comments
-                comments.append(new_comment)
+        commentForm = CommentForm(data = request.POST)
+        
     else:
-        commentForm = CommentForm()
+        context_dict['commentForm'] = CommentForm()
 
     return render(request, 'events/event.html', context=context_dict)
 
