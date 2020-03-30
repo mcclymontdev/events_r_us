@@ -5,7 +5,7 @@
 {% if user.is_authenticated %}
   <form enctype="multipart/form-data" method="POST">
     {% csrf_token %}
-    {{ profile_updateform.as_p }}
+    {{ ProfileUpdateForm.as_p }}
     <input type="submit" name="" value="Update">
   </form>
 {% else %}

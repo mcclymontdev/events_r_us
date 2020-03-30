@@ -1,17 +1,20 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth import login as auth_login
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django_registration.views import RegistrationView
-from events.forms import UserForm, UserProfileForm, EventForm, SearchForm, ProfileUpdateForm
+from events.forms import UserForm, UserProfileForm, EventForm, SearchForm, ProfileUpdateForm, EditProfileForm
 from events.helpers import haversine
 from .models import User, Event, Category
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template import Context
 from django.http import HttpResponseRedirect
+from django.contrib.auth.forms import UserChangeForm,PasswordChangeForm
+
+
 
 def index(request):
     form = SearchForm()
@@ -182,53 +185,36 @@ def add_event(request):
         
     return render(request, 'events/add_event.html', {'form': form})
     
-def profile(request):
-    current_user = request.user
-    form = UserProfileForm(request.POST or None, instance=current_user)
-    if request.POST:
-        if form.is_valid():
-             picture = form.cleaned_data['Picture']
-             location = form.cleaned_data['location']
-             # form_obj.password = make_password(pwd)
-             form.save()
-             message = "saved successfully"
-             return render(request, 'profile.html', {'form':form, 'message':message}, context_instance=RequestContext(request))
-
-    return render(request, 'events/profile.html', {
-        'form': form,
-    })
-    
-@login_required
-def profile_update(request):
-    user = request.user
-    form = ProfileUpdateForm(request.POST or None, instance=user)
-    if request.method == 'POST':
+def edit_profile(request):
+    if request.method == "POST":
+        form = EditProfileForm(request.POST, instance=request.user)
+        
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('events:index'))
-        else:
-            print("ERROR")
+            return redirect(reverse('events:index'))
     else:
-        print(request.method)
-    context = {
-        "profile_updateform":form,
-    }
-    return render(request, 'events/profile.html', context)
+        form = EditProfileForm(instance=request.user)
+        args={'form':form}
+        return render(request, 'events/profile.html',args)
     
-def show_event(request, id, event_slug):
-    context_dict = {}
-    try:
-        context_dict['event'] = Event.objects.get(EventID=id, slug=event_slug)
-
-    except Event.DoesNotExist:
-        context_dict['event'] = None
-
-    return render(request, 'events/event.html', context=context_dict)
-#def account(request):
- #  return render(request, 'events/login.html')
+def change_password(request):
+    if request.method == "POST":
+        form = PasswordChangeForm(data = request.POST, user=request.user)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request,form.user)
+            return redirect('events:index')
+            
+        else:
+            form = PasswordChangeForm(user=request.user)
+            args = {'form':form}
+            return render(request, 'events/change_password.html',args)
+    else:
+        form = PasswordChangeForm(user=request.user)
+        args = {'form':form}
+        return render(request, 'events/change_password.html',args)
     
-    
-    
+        
 
 def index(request):
 
