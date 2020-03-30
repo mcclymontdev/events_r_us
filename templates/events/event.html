@@ -8,6 +8,11 @@
 {% block head_block %}
     <script src="{% static '/js/submit_rating.js' %}"></script>
     <script src="{% static '/js/image_popup.js' %}"></script>
+
+    <!-- Map JS/CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/leaflet/1/leaflet.css" />
+    <script src="https://cdn.jsdelivr.net/leaflet/1/leaflet.js"></script>
+    <script src="{% static '/js/event_map.js' %}"></script>
 {% endblock %}
 
 {% block body_block %}
@@ -48,10 +53,15 @@
       <div class="col-4">
         <div class="card">
             <!--
-                TODO: Implement map
+                Map
             -->
-            <img class="card-img-top" src="{% static '/images/map-placeholder.png' %}" alt="Card image cap">
+            <input type="hidden" id="Latitude" name="Latitude" value="{{ event.Latitude }}">
+            <input type="hidden" id="Longitude" name="Longitude" value="{{ event.Longitude }}">
+            <div class="card-img-top" id="map-container"></div>
 
+            <!--
+              Event info body
+            -->
             <div class="card-body">
                 <h5 class="card-title">
                     {{ event.UserID.username }}</h5>
@@ -64,7 +74,7 @@
                 </p>
             </div>
             <!--
-              TODO: Rating system
+              Rating system
             -->
             <div class="card-footer">
                 <form role="form" name="rating_form" id="rating_form" method="post" enctype="multipart/form-data" action="{% url 'events:show_event' id=event.EventID event_slug=event.slug %}">
@@ -83,7 +93,6 @@
                       {{ form.rating.0.tag }}<label class="half" for="{{ form.rating.0.id_for_label }}" title="0.5 stars"></label>
                     </fieldset>
                     {{ form.rating.errors }}
-                    <!-- Temp total rating display -->
                 </form>
             </div>
             <div class="card-footer">
