@@ -1,5 +1,6 @@
 {% extends 'events/base.html' %}
 {% load static %}
+{% load add_attr %}
 
 {% block title_block %}
     Add an event
@@ -20,7 +21,7 @@
 {% block body_block %}
 <div class="container">
     {% if user.is_authenticated %}
-        <div class="row">
+        <div class="d-flex justify-content-center">
             <form role="form" id="event_form" method="post" enctype="multipart/form-data" action="{% url 'events:add_event' %}">
                 <h2 class="addedit-event-heading">Add event</h2>
                 {% csrf_token %}
@@ -29,18 +30,26 @@
                 {% endfor %}
                 {% for field in form.visible_fields %}
                     {% if field.name == 'DateTime' %}
+                    {{ field.label }}
+                    {{ field.errors }}
                     <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                        {{ field.errors }}
-                        {{ field.help_text }}<br />
-                        {{ field }}<br />
+                        {{ field }}
                         <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                         </div>
                     </div>
+                    <br />
+                    {% elif field.name == 'Picture' %}
+                        <br />
+                        {{ field.errors }}
+                        {{ field.label }}<br />
+                        {{ field }}<br />
+                        <br />
                     {% else %}
                         {{ field.errors }}
-                        {{ field.help_text }}<br />
-                        {{ field }}<br />
+                        {{ field.label }}<br />
+                        {{ field|add_attr:"class:form-control" }}
+                        <br />
                     {% endif %}
                 {% endfor %}
                 <br/>
@@ -50,7 +59,7 @@
             </form>
         </div>
     {% else %}
-        <div class="row">
+        <div class="d-flex justify-content-center">
             <p>You must be logged in to add an event.</p>
         </div>
     {% endif %}
