@@ -1,0 +1,45 @@
+{% extends 'events/base.html' %}
+{% load static %}
+{% load add_attr %}
+
+{% block title_block %}
+    Manage events
+{% endblock %}
+
+{% block head_block %}
+
+{% endblock %}
+
+{% block body_block %}
+    <div class="manage-event-box">
+        <div class="container justify-content-center event-card-box">
+            <h2 class="manage-event-heading">Manage events</h2>
+            <a class="btn btn-success" id="create-new-event-button" href="{% url 'events:add_event' %}">Create new event</a>
+            <div class="row">
+                {% for event in events_list %}
+                <div class="col-sm-4 mb-5">
+                    <div class="card">
+                        <img class="card-img-top" src="{{ event.Picture.url }}" alt="Event thumbnail">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="{% url 'events:show_event' id=event.EventID event_slug=event.slug %}">
+                                    {{ event.EventName }}
+                                </a>
+                            </h5>
+                            <small class="text-muted">{{ event.DateTime }}</small>
+                        </div>
+                        <div class="card-footer">
+
+                            <a class="btn btn-primary" href="{% url 'events:edit_event' id=event.EventID %}">Edit details</a>
+                            <!-- 
+                                TODO: delete event button
+                            -->
+                            <a class="btn btn-danger" href="{% url 'events:delete_event' id=event.EventID %}">Delete</a>
+                        </div>
+                      </div>
+                </div>
+                {% endfor %}
+              </div>
+        </div>
+    </div>
+{% endblock %}

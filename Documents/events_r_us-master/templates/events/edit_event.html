@@ -1,0 +1,58 @@
+{% extends 'events/base.html' %}
+{% load static %}
+
+{% block title_block %}
+    Edit event
+{% endblock %}
+
+{% block head_block %}
+    <!-- Moment.js (Date and time picker) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.23.0/moment.min.js" integrity="sha256-VBLiveTKyUZMEzJd6z2mhfxIqz3ZATCuVMawPZGzIfA=" crossorigin="anonymous"></script>
+    <!-- Tempus Dominus Boostrap 4 (Date and time picker) -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/places.js@1.18.1"></script>
+
+    <script src="{% static '/js/datetimepicker.js' %}"></script>
+{% endblock %}
+
+{% block body_block %}
+<div class="container">
+    {% if user.is_authenticated %}
+        <div class="row">
+            <form role="form" id="event_form" method="post" enctype="multipart/form-data" action="{% url 'events:edit_event' id=id %}">
+                <h2 class="addedit-event-heading">Edit event</h2>
+                {% csrf_token %}
+                {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+                {% for field in form.visible_fields %}
+                    {% if field.name == 'DateTime' %}
+                    <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                        {{ field.errors }}
+                        {{ field.help_text }}<br />
+                        {{ field }}<br />
+                        <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
+                    </div>
+                    {% else %}
+                        {{ field.errors }}
+                        {{ field.help_text }}<br />
+                        {{ field }}<br />
+                    {% endif %}
+                {% endfor %}
+                <br/>
+                <button class="btn btn-primary" type="submit" name="submit">Save changes</button>
+                <div class="p-5"></div>
+                <script src="{% static '/js/address_autocomplete.js' %}"></script>
+            </form>
+        </div>
+    {% else %}
+        <div class="row">
+            <p>You must be logged in to edit an event.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

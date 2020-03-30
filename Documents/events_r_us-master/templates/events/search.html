@@ -1,0 +1,69 @@
+{% extends 'events/base.html' %}
+{% load static %}
+{% load add_attr %}
+
+{% block title_block %}
+    Search
+{% endblock %}
+
+{% block head_block %}
+
+{% endblock %}
+
+{% block body_block %}
+    <!-- Filter search form -->
+    <div class="container" id="filter-box">
+        <form role="form" name="search_form" id="search_form" method="post" action="{% url 'events:search' %}">
+            {% csrf_token %}
+            {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+            {% endfor %}
+            <div class="form-row justify-content-center">
+                {% for field in form.visible_fields %}
+                    <div class="form-group mr-3 ">
+                        {{ field.label_tag }}
+                        {{ field|add_attr:"class:form-control" }}
+                    </div>
+                {% endfor %}
+                <div class="form-group mr-2">
+                        <button type="submit" class="refine-search btn btn-primary form-control" >Filter</button>
+                </div>
+                <div class="form-group mr-2">
+                    <p class="refine-search">or</p>
+                </div>
+                <div class="form-group mr-2">
+                    <a href="{% url 'events:index' %}" class="refine-search btn btn-outline-dark">Change location</a>
+                </div>
+            </div>
+        </form>
+        <hr class="my-4">
+    </div>
+    <!-- end of filter box -->
+
+    <!-- Event cards -->
+    <div class="container justify-content-center event-card-box">
+        <div class="row">
+            {% for event in events_list %}
+            <div class="col-sm-4 mb-5">
+                <div class="card">
+                    <img class="card-img-top" src="{{ event.Picture.url }}" alt="Event thumbnail">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="{% url 'events:show_event' id=event.EventID event_slug=event.slug %}">
+                                {{ event.EventName }}
+                            </a>
+                        </h5>
+                        <p class="card-text">{{ event.Description }}</p>
+                        <hr>
+                        <p>Approx. {{ event.distance }} miles away.</p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">{{ event.DateTime }}</small>
+                    </div>
+                  </div>
+            </div>
+            {% endfor %}
+          </div>
+    </div>
+    <!-- End of event cards -->
+{% endblock %}

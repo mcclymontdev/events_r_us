@@ -1,0 +1,31 @@
+{% extends 'events/base.html' %}
+{% load static %}
+
+{% block title_block %}
+    Profile
+{% endblock %}
+
+{% block body_block %}
+{% if user.is_authenticated %}
+    <!-- Profile form -->
+	<div class="d-flex justify-content-center"><h1>{{ user }}s Profile</h1></div>
+    <div class="d-flex justify-content-center">
+	
+      <form id="profile-login-form">
+        <div class="form-group">
+          <label for="Picture">Picture</label>
+          <input type="file" class="form-control" id="p" placeholder="picture...">
+        </div>
+        <div class="form-group">
+          <label for="location">Location</label>
+          <input type="location" class="form-control" id="location" placeholder="location...">
+        </div>
+        <button type="submit" class="btn btn-primary" id="login">update</button>
+
+      </form>
+      </div>
+      <!-- End login form-->
+	{%else%}
+	This is a restricted page.
+	{%endif%}
+{% endblock %}

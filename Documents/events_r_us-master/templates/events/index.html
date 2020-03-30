@@ -1,0 +1,57 @@
+{% extends 'events/base.html' %}
+{% load static %}
+
+{% block title_block %}
+    Home
+{% endblock %}
+
+{% block head_block %}
+    <script src="{% static '/js/get_location.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/places.js@1.18.1"></script>
+{% endblock %}
+
+{% block body_block %}
+    <!--
+        Image background
+    -->
+    <div id="bg-home"></div>
+
+    <div class="d-flex justify-content-center">
+        <div id="finder-box" class="jumbotron">
+
+            <form role="form" name="search_form" id="search_form" method="post" action="{% url 'events:search' %}">
+                {% csrf_token %}
+                {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+            </form>
+
+            <div class="d-flex justify-content-center">
+			<!--
+				This button should request the user's location and make a request to the search view with the location data (map API)
+            -->
+                <button id="get_location_button" class="btn btn-lg btn-primary" type="button" onclick="getLocation()">Find local events 
+                <i style="margin-left: 5px;" class="fa fa-location-arrow" aria-hidden="true"></i>
+                </button>
+            </div>
+
+
+            <hr class="my-4">
+
+			<!--
+				TODO: Button sends the user's input and makes a request to the search view with the location data (Should incorporate map API)
+			-->
+            <div class="d-flex justify-content-center">
+                <div class="row mb-3">
+                    <div class="col-12 col-sm-8">
+                        <input id="id_Address" type="text" placeholder="Find events in...">
+                    </div>
+                    <div class="col-2">
+                        <button class="btn btn-primary" type="button" onclick="search_form.submit()">Search</button>
+                    </div>
+                </div>
+                <script src="{% static '/js/address_autocomplete.js' %}"></script>
+            </div>
+        </div>
+    </div>
+{% endblock %}
