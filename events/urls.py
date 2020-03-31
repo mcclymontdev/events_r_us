@@ -5,6 +5,7 @@ app_name = 'events'
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('about', views.about, name='about'),
     path('sign-up', views.signup, name='sign-up'),
     path('login', views.login, name='login'),
 	path('logout/', views.user_logout, name= 'logout'),

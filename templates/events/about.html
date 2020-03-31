@@ -1,0 +1,23 @@
+{% extends 'events/base.html' %}
+{% load static %}
+{% load add_attr %}
+
+{% block title_block %}
+    About us
+{% endblock %}
+
+{% block head_block %}
+
+{% endblock %}
+
+{% block body_block %}
+        <div class="container justify-content-center">
+            <div id="about-header-image" class="height-crop">
+                <img src="{% static 'images/uni.jpg'%}" class="img-fluid" alt="About us image">
+            </div>
+            <a href="https://www.gla.ac.uk/events/universeum2018/" class="figure-caption">Image source</a>
+            <h2 class="about-heading">About us</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi et accumsan est, in laoreet arcu. Sed a leo sem. Integer consequat quis ligula eu eleifend. Suspendisse lacinia fringilla consectetur. Donec aliquam quam velit, in tincidunt enim porta nec. Suspendisse viverra tempor consequat. Aenean porttitor urna sed rhoncus dictum. In placerat est ut ex pellentesque, vitae varius neque ultricies. Duis iaculis elit in dui hendrerit, laoreet blandit risus consequat. Nunc vestibulum consequat mi id varius. Morbi luctus magna a nisi porttitor cursus. Nunc egestas purus ac ipsum vestibulum cursus.</p>
+            <p>Proin et turpis ac leo eleifend accumsan. Fusce vel convallis mauris. Nunc a metus mauris. Quisque eget consectetur erat. Nulla augue magna, iaculis nec sagittis vitae, posuere sit amet libero. Nulla facilisi. Donec gravida, tellus ut commodo cursus, odio elit convallis nisi, in elementum velit urna in urna. Nunc ut convallis nibh.</p>
+        </div>
+{% endblock %}

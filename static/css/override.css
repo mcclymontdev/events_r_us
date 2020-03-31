@@ -73,6 +73,10 @@ a.event-link {
   margin: 25px 0px;
 }
 
+#about-header-image{
+  margin: 25px 0px 0px 0px;
+}
+
 .event-image-shadow {
   box-shadow: 0 1px 2px rgba(17, 13, 13, 0.35);
   -webkit-box-shadow: 0 1px 2px rgba(17, 13, 13, 0.35);
@@ -100,6 +104,11 @@ a.event-link {
 .manage-event-heading {
   color: #364f6b;
   padding-bottom: 1vw;
+}
+
+.about-heading {
+  color: #364f6b;
+  padding-top: 0.4vw;
 }
 
 .addedit-event-heading {
@@ -201,6 +210,7 @@ a.event-link {
 
 /* 
   Star Rating
+  CSS from: https://codepen.io/jamesbarnett/details/vlpkh
 */
 
 @import url(./font-awesome.min.css);
@@ -230,7 +240,9 @@ a.event-link {
   float: right; 
 }
 
-/***** CSS Magic to Highlight Stars on Hover *****/
+/* 
+  Highlight stars on hover 
+*/
 
 .rating > input:checked ~ label, /* show gold star when clicked */
 .rating:not(:checked) > label:hover, /* hover current star */
@@ -240,6 +252,8 @@ a.event-link {
 .rating > input:checked ~ label:hover,
 .rating > label:hover ~ input:checked ~ label, /* lighten current selection */
 .rating > input:checked ~ label:hover ~ label { color: #87dce0;  } 
+
+/* End of credit */
 
 .rating-head {
   margin-bottom: 0em;
