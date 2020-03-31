@@ -249,7 +249,7 @@ def show_event(request, id, event_slug):
             total_rating = 0
             for r in all_ratings:
                 total_rating += r.Rating
-            context_dict['total_rating'] = total_rating/num_of_ratings
+            context_dict['total_rating'] = round((total_rating/num_of_ratings), 1)
             context_dict['num_of_ratings'] = num_of_ratings
         else:
             context_dict['total_rating'] = 0

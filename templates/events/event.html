@@ -153,6 +153,7 @@
               Rating system
             -->
             <div class="card-footer">
+              {% if user.is_authenticated %}
                 <form role="form" name="rating_form" id="rating_form" method="post" enctype="multipart/form-data" action="{% url 'events:show_event' id=event.EventID event_slug=event.slug %}">
                     {% csrf_token %}
                     <p class="card-text rating-head">Your rating:</p>
@@ -170,6 +171,9 @@
                     </fieldset>
                     {{ form.rating.errors }}
                 </form>
+              {% else %}
+                <p class="card-text rating-head">You must be logged in to leave a rating</p>
+              {% endif %}
             </div>
             <div class="card-footer">
               {% if num_of_ratings > 0 %}

@@ -1,5 +1,11 @@
 {% extends "events/base.html" %}
 
 {% block body_block %}
-    <p>You are now registered.</p>
+<div class="container manage-event-box">
+    {% if user.is_authenticated %}
+    <div class="alert alert-success" role="alert">
+        Welcome, <span class="font-weight-bold">{{ user.username }}</span>!
+    </div>
+    {% endif %}
+</div>
 {% endblock %}
