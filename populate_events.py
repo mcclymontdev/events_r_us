@@ -41,8 +41,7 @@ def populate():
         user = User.objects.create_user(username=u['username'], email=u['email'], password=u['password'], first_name=u['first_name'], last_name=u['last_name'])
         print("User added: " + "'" + u['username'] + "'")
         
-        
-    event_desc = ['',
+    event_desc = [
     'EricDanceCo is a dance class which involves many different styles of dance including: hiphop, R&B, freestyle, Contemporary and many more. There are difference types of classes ranging from one-to-one tution to group work. ',
     'Learn to rap freestyle with Namjoon. Workshops include individual lessons and group style classes.',
     'Struggling to find a friend to go to a concert with? Use this event to connect with others going to the concert and find friends to go with.',
@@ -57,9 +56,8 @@ def populate():
     'If you are interested in architecture this class is perfect for you! Learn all the basics to architecture and begin building your own creations.',
     'Ballet classes taught by the uk best ballet dances. Learn from the best at this class',
     'Kai Dance School are for those who want to learn intricate and high levels of dance.',
-    
     ]
-    # Example event population script
+
     events = [
         {'username':'Eric1337_Dance', 'EventName':'EricDanceCo', 'Description':event_desc[0], 'Picture':'dance.png', 'Address':'53 Morrison St', 'Latitude':'55.853673', 'Longitude':'-4.268097', 'category':'Fitness','eventType':'Recurring'},
         {'username':'Lisa_UMG', 'EventName':'Rap Class', 'Description':event_desc[1], 'Picture':'rap.png', 'Address':'7 langley st', 'Latitude':'51.5134', 'Longitude':'-0.1251', 'category':'Class/Workshop','eventType':'Recurring'},
@@ -75,8 +73,8 @@ def populate():
         {'username':'Lisa_UMG', 'EventName':'Architecture Class', 'Description':event_desc[11], 'Picture':'architecture.png', 'Address':'518 The Green', 'Latitude':'51.4593', 'Longitude':'-3.2121', 'category':'Class/Workshop','eventType':'Recurring'},
         {'username':'Eric1337_Dance', 'EventName':'Ballet Course', 'Description':event_desc[12], 'Picture':'ballet.png', 'Address':'27 Richmond Road', 'Latitude':'52.4785', 'Longitude':'-1.8137', 'category':'Fitness','eventType':'Recurring'},
         {'username':'Eric1337_Dance', 'EventName':'Kai Dance School', 'Description':event_desc[13], 'Picture':'kai.png', 'Address':'56 Kingsway', 'Latitude':'51.4676', 'Longitude':'-0.2753', 'category':'Fitness','eventType':'Recurring'},
-        
     ]
+    
     for e in events:
         User_obj = User.objects.get(username=e['username'])
         category_obj = Category.objects.get(Name=e['category'])
