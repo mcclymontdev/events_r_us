@@ -90,12 +90,13 @@ class Comment(models.Model):
     UserID = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     Comment = models.CharField(max_length = COMMENT_MAX_LENGTH)
     CreatedOn = models.DateTimeField(auto_now_add = True)
-    #ParentCommentID = models.ForeignKey(Comments, on_delete=models.CASCADE)
+    ParentCommentID = models.ForeignKey('self', on_delete=models.CASCADE, null = True, blank = True, related_name = 'replies')
     
     def __str__(self):
         return self.Comment
     
     class Meta:
+        ordering = ('CreatedOn',)
         unique_together = ("CommentID", "EventID")
         
     def save(self, *args, **kwargs):

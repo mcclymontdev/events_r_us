@@ -69,7 +69,7 @@ class EventRatingsForm(forms.ModelForm):
         fields = ('rating',)
         
 class CommentForm(forms.ModelForm):
-    Comment = forms.CharField(label='Comment', max_length = Comment.COMMENT_MAX_LENGTH)
+    Comment = forms.CharField(label='', widget = forms.Textarea(attrs = {'class': 'form-control', 'placeholer': 'Comment here', 'rows': 4, 'cols':50}), max_length = Comment.COMMENT_MAX_LENGTH)
     class Meta:
         model = Comment
         fields = ('Comment',)

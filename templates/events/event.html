@@ -40,22 +40,70 @@
         </div>
 
         <!--
-            TODO: Comment system :)
+            Comment system :)
         -->
 		<div class="card-body">
 			<div id="comment-section">
 				<h4>{{ comments.count }} comments</h4>
-				
+				<!--Comment display-->
 				{% for comment in comments %}
-				<div class = "comments">
-					<p class = "font-weight-bold">
+				{% if not comment.ParentCommentID %}
+				<div class="comments mt-2">
+					<p class="font-weight-bold">
 						{{comment.UserID.username}}
-						<span class= "text-muted font-weight-normal">
+						<span class="text-muted font-weight-normal">
 							{{comment.CreatedOn}}
 						</span>
 					</p>
 					{{comment.Comment | linebreaks }}
+					<!--Reply button-->
+					{% if user.is_authenticated %}
+					<footer class="blockquote-footer">
+						<button type="button" name="button" class="reply-btn btn btn-outline-dark btn-sm">Reply</button>
+					</footer>
+
+					<div class="replied-comments container mt-2" style="display:none">
+						<div class="from-group row">
+							<form method="post">
+								{% csrf_token %}
+								{{commentForm.as_p}}
+								<input type ="hidden" name="parent_id" value ="{{ comment.CommentID }}">
+								<input class="btn btn-outline-dark btn-sm" type="Submit" value="Submit">
+							</form>
+						</div>
+					</div>
+					{% endif %}
+					<!--Reply display-->
+					<div class = "relpies ml-4">
+					{% for reply in comment.replies.all %}
+						<p class = "font-weight-bold mt-2">
+						{{reply.UserID.username}}
+						<span class= "text-muted font-weight-normal">
+							{{reply.CreatedOn}}
+						</span>
+						</p>
+						{{reply.Comment | linebreaks }}
+						<!--Reply button-->
+						{% if user.is_authenticated %}
+						<footer class="blockquote-footer">
+							<button type="button" name="button" class="reply-btn btn btn-outline-dark btn-sm">Reply</button>
+						</footer>
+
+						<div class="replied-comments container mt-2" style="display:none">
+							<div class="from-group row">
+								<form method="post">
+									{% csrf_token %}
+									{{commentForm.as_p}}
+									<input type ="hidden" name="parent_id" value ="{{ comment.CommentID }}">
+									<input class="btn btn-outline-dark btn-sm" type="Submit" value="Submit">
+								</form>
+							</div>
+						</div>
+						{% endif %}
+					{% endfor %}
+					</div>
 				</div>
+				{% endif %}
 				{% endfor %}
 				{% if user.is_authenticated %}
 				<div class="card-body">
@@ -63,7 +111,7 @@
 					<form method="post">
 						{% csrf_token %}
 						{{commentForm.as_p}}
-						<input type="submit" value="Submit"> 
+						<input type="submit" value="Submit">
 					</form>
 				</div>
 				{% else %}

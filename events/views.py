@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import login as auth_login
 from django.urls import reverse
@@ -160,11 +160,11 @@ def show_event(request, id, event_slug):
     try:
         org_eventrating = EventRatings.objects.get(EventID=id, UserID=request.user)
         ratingsForm = EventRatingsForm(request.POST or None, initial={'rating':org_eventrating.Rating})
-        commentForm = CommentForm(data = request.POST)
+        commentForm = CommentForm(request.POST or None)
         print(ratingsForm.initial)
     except:
          ratingsForm = EventRatingsForm(request.POST or None)
-         commentForm = CommentForm(data = request.POST)
+         commentForm = CommentForm(request.POST or None)
          print("New form")
 
     context_dict = {}
@@ -197,16 +197,47 @@ def show_event(request, id, event_slug):
                     org_eventrating.save()
                     
             elif commentForm.is_valid():
+                parent_comment = None
+                # find the parent, if it exists
+                
+                
+                try:
+                    parent_id = int(request.POST.get('parent_id'))
+                    print("GOT ID")
+                except:
+                    parent_id = None
+                    print("NOT ID")
+                    
                 # Create the Comment object
                 new_comment = commentForm.save(commit = False)
                 # Assign the comment to the event
                 new_comment.EventID = context_dict['event']
                 # Give a local ID to the comment
                 new_comment.CommentID = len(comments) + 1
+                
+                if parent_id:
+                    parent_comment = Comment.objects.get(CommentID = parent_id)
+                    # ensure that a parent comment exists
+                    if not parent_comment:
+                        new_comment.ParentCommentID = None
+                    else:
+                        # edit the comment to refer to the parent
+                        new_comment.Comment = "@" + parent_comment.UserID.username + ' ' + new_comment.Comment
+                        # make the parent comment the first comment in the chain
+                        while parent_comment.ParentCommentID:
+                            parent_comment = Comment.object.get(CommentID = parent_comment.ParentCommentID)
+                        
+                        new_comment.ParentCommentID = parent_comment
+                    
+                else:
+                    new_comment.ParentCommentID = None
+                
                 # Assign comment to logged in user
                 new_comment.UserID = request.user
                 # Save to database
                 new_comment.save()
+                return HttpResponseRedirect('')
+                
             else:
                 print(ratingsForm.errors)
                 print(commentForm.errors)
@@ -230,13 +261,7 @@ def show_event(request, id, event_slug):
         context_dict['commentForm'] = None
         context_dict['comments'] = None
 
-    new_comment = None
-    
-    if request.method == 'POST':
-        commentForm = CommentForm(data = request.POST)
-        
-    else:
-        context_dict['commentForm'] = CommentForm()
+
 
     return render(request, 'events/event.html', context=context_dict)
 
