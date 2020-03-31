@@ -80,7 +80,7 @@ def populate():
     for e in events:
         User_obj = User.objects.get(username=e['username'])
         category_obj = Category.objects.get(Name=e['category'])
-        event = Event.objects.create(UserID=User_obj, EventName=e['EventName'], Description=e['Description'], Picture=e['Picture'], Address=e['Address'], Latitude=e['Latitude'], Longitude=e['Longitude'], category=category_obj, eventType=e['eventType'])
+        event = Event.objects.create(UserID=User_obj, EventName=e['EventName'], Description=e['Description'], Picture='event_image/'+e['Picture'], Address=e['Address'], Latitude=e['Latitude'], Longitude=e['Longitude'], category=category_obj, eventType=e['eventType'])
         print("Event added: " + "'" + e['EventName'] + "'")
 
 if __name__ == '__main__':
