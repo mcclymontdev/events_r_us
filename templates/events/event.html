@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/leaflet/1/leaflet.css" />
     <script src="https://cdn.jsdelivr.net/leaflet/1/leaflet.js"></script>
     <script src="{% static '/js/event_map.js' %}"></script>
+    <script src="{% static '/js/reply_button.js' %}"></script>
+
 {% endblock %}
 
 {% block body_block %}
@@ -50,7 +52,11 @@
 				{% if not comment.ParentCommentID %}
 				<div class="comments mt-2">
 					<p class="font-weight-bold">
-						{{comment.UserID.username}}
+            {% if comment.UserID == event.UserID %}
+						<p class = "font-weight-bold" style="color:green;">{{comment.UserID.username}}</p>
+            {% else %}
+            {{comment.UserID.username}}
+            {% endif %}
 						<span class="text-muted font-weight-normal">
 							{{comment.CreatedOn}}
 						</span>
@@ -77,7 +83,11 @@
 					<div class = "relpies ml-4">
 					{% for reply in comment.replies.all %}
 						<p class = "font-weight-bold mt-2">
-						{{reply.UserID.username}}
+              {% if reply.UserID == event.UserID %}
+  						<p class = "font-weight-bold" style="color:green;">{{reply.UserID.username}}</p>
+              {% else %}
+              {{reply.UserID.username}}
+              {% endif %}
 						<span class= "text-muted font-weight-normal">
 							{{reply.CreatedOn}}
 						</span>
@@ -94,7 +104,7 @@
 								<form method="post">
 									{% csrf_token %}
 									{{commentForm.as_p}}
-									<input type ="hidden" name="parent_id" value ="{{ comment.CommentID }}">
+									<input type ="hidden" name="parent_id" value ="{{ reply.CommentID }}">
 									<input class="btn btn-outline-dark btn-sm" type="Submit" value="Submit">
 								</form>
 							</div>

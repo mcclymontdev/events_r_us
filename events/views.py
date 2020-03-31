@@ -203,10 +203,8 @@ def show_event(request, id, event_slug):
                 
                 try:
                     parent_id = int(request.POST.get('parent_id'))
-                    print("GOT ID")
                 except:
                     parent_id = None
-                    print("NOT ID")
                     
                 # Create the Comment object
                 new_comment = commentForm.save(commit = False)
@@ -225,7 +223,7 @@ def show_event(request, id, event_slug):
                         new_comment.Comment = "@" + parent_comment.UserID.username + ' ' + new_comment.Comment
                         # make the parent comment the first comment in the chain
                         while parent_comment.ParentCommentID:
-                            parent_comment = Comment.object.get(CommentID = parent_comment.ParentCommentID)
+                            parent_comment = parent_comment.ParentCommentID
                         
                         new_comment.ParentCommentID = parent_comment
                     
@@ -236,7 +234,7 @@ def show_event(request, id, event_slug):
                 new_comment.UserID = request.user
                 # Save to database
                 new_comment.save()
-                return HttpResponseRedirect('')
+                return redirect('events:show_event', id=id, event_slug=event_slug)
                 
             else:
                 print(ratingsForm.errors)
