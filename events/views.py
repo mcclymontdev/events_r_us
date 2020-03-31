@@ -17,6 +17,9 @@ def index(request):
     form = SearchForm()
     return render(request, 'events/index.html', {'form' : form})
 
+def about(request):
+    return render(request, 'events/about.html')
+
 def signup(request):
 	registered = False
 	
