@@ -130,8 +130,8 @@ a.event-link {
 */
 
 .popup {
-  /* Keeping the popup on the first layer */
-  z-index: 1;
+  /* Keeping the popup on the top layer */
+  z-index: 2;
   display: none;
   position: fixed;
   padding-top: 6%;
@@ -270,4 +270,5 @@ a.event-link {
 
 #map-container {
   height: 18em;
+  z-index: 1;
 };
