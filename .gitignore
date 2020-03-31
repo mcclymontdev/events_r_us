@@ -55,6 +55,3 @@ share/python-wheels/
 migrations
 migrations/
 migrations/*
-media
-media/
-event_image/
