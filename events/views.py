@@ -8,7 +8,6 @@ from django_registration.views import RegistrationView
 from events.forms import UserForm, UserProfileForm, EventForm, SearchForm, EventRatingsForm,ProfileUpdateForm, EditProfileForm
 from events.helpers import haversine
 from .models import User, Event, Category, EventRatings
-from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template import Context
 from django.http import HttpResponseRedirect
