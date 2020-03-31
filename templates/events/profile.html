@@ -1,0 +1,18 @@
+{% extends "events/base.html" %}
+{% load staticfiles %}
+{% block body_block %}
+
+{% if user.is_authenticated %}
+<div class="d-flex justify-content-center">
+<p></p>
+  <form id="profile_form" enctype="multipart/form-data" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" class="btn btn-primary" name="" value="Update">
+  </form>
+</div>
+{% else %}
+  <h1>You need to login!</h1>
+{% endif %}
+
+{% endblock %}
