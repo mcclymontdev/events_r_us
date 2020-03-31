@@ -7,7 +7,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'events_r_us.settings')
 import django
 django.setup()
 
-from events.models import Category, Event
+from events.models import Category, Event, EventRatings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 
@@ -22,7 +22,7 @@ def populate():
         {'username':'Steve5013', 'email':'Steve5013@example.com', 'password':'greenjewel20', 'first_name':'Steve', 'last_name':'Jones'},
         {'username':'karisnimmo99' , 'email': 'karisnimmo1234@example.com', 'password':'joonie94', 'first_name':'Karis', 'last_name':'Nimmo',},
         {'username':'ewanhempsey_skz' , 'email':'ewan_loves_skz@example.com', 'password':'jisung00', 'first_name':'Ewan', 'last_name':'Hempsey',},
-        {'username':'rory_comp_genius' , 'email':'rory55@example.com', 'password':'rm567', 'first_name':'Rory', 'last_name':'McClymont',},
+        {'username':'rory00' , 'email':'rory55@example.com', 'password':'rm567', 'first_name':'Rory', 'last_name':'McClymont',},
         {'username': 'jamesross', 'email':'jamesR_99@example.com', 'password':'bambi90', 'first_name':'James', 'last_name':'Ross',},
         
     ]
@@ -80,6 +80,59 @@ def populate():
         category_obj = Category.objects.get(Name=e['category'])
         event = Event.objects.create(UserID=User_obj, EventName=e['EventName'], Description=e['Description'], Picture='event_image/'+e['Picture'], Address=e['Address'], Latitude=e['Latitude'], Longitude=e['Longitude'], category=category_obj, eventType=e['eventType'], DateTime=e['DateTime'])
         print("Event added: " + "'" + e['EventName'] + "'")
+
+    ratings = [
+        {'username':'Eric1337_Dance', 'EventName':'EricDanceCo', 'Rating':3.0},
+        {'username':'Lisa_UMG', 'EventName':'EricDanceCo', 'Rating':4.5},
+        {'username':'Steve5013', 'EventName':'EricDanceCo', 'Rating':4.0},
+        {'username':'karisnimmo99', 'EventName':'EricDanceCo', 'Rating':4.5},
+        {'username':'rory00', 'EventName':'EricDanceCo', 'Rating':5.0},
+        {'username':'Lisa_UMG', 'EventName':'Rap Class', 'Rating':5.0},
+        {'username':'Eric1337_Dance', 'EventName':'Rap Class', 'Rating':3.0},
+        {'username':'Lisa_UMG', 'EventName':'Concert Buddy', 'Rating':5.0},
+        {'username':'Eric1337_Dance', 'EventName':'Concert Buddy', 'Rating':1.5},
+        {'username':'ewanhempsey_skz', 'EventName':'Concert Buddy', 'Rating':2.5},
+        {'username':'Lisa_UMG', 'EventName':'Kpop Party', 'Rating':5.0},
+        {'username':'karisnimmo99', 'EventName':'Kpop Party', 'Rating':3.5},
+        {'username':'jamesross', 'EventName':'Kpop Party', 'Rating':4.0},
+        {'username':'rory00', 'EventName':'Kpop Party', 'Rating':1.0},
+        {'username':'Steve5013', 'EventName':'3Racha', 'Rating':5.0},
+        {'username':'Eric1337_Dance', 'EventName':'3Racha', 'Rating':5.0},
+        {'username':'rory00', 'EventName':'3Racha', 'Rating':4.0},
+        {'username':'Steve5013', 'EventName':'workout friends', 'Rating':5.0},
+        {'username':'rory00', 'EventName':'workout friends', 'Rating':4.0},
+        {'username':'karisnimmo99', 'EventName':'workout friends', 'Rating':4.5},
+        {'username':'karisnimmo99', 'EventName':'FelixRave', 'Rating':5.0},
+        {'username':'rory00', 'EventName':'FelixRave', 'Rating':5.0},
+        {'username':'jamesross', 'EventName':'FelixRave', 'Rating':4.5},
+        {'username':'karisnimmo99', 'EventName':'ChansKitchen', 'Rating':5.0},
+        {'username':'Steve5013', 'EventName':'ChansKitchen', 'Rating':5.0},
+        {'username':'Steve5013', 'EventName':'Fix_on', 'Rating':3.5},
+        {'username':'karisnimmo99', 'EventName':'Fix_on', 'Rating':5.0},
+        {'username':'Lisa_UMG', 'EventName':'Fix_on', 'Rating':5.0},
+        {'username':'Lisa_UMG', 'EventName':'80sNight', 'Rating':5.0},
+        {'username':'karisnimmo99', 'EventName':'80sNight', 'Rating':5.0},
+        {'username':'Lisa_UMG', 'EventName':'Hikers', 'Rating':4.0},
+        {'username':'ewanhempsey_skz', 'EventName':'Hikers', 'Rating':4.5},
+        {'username':'Lisa_UMG', 'EventName':'Architecture Class', 'Rating':4.5},
+        {'username':'karisnimmo99', 'EventName':'Architecture Class', 'Rating':4.5},
+        {'username':'rory00', 'EventName':'Architecture Class', 'Rating':3.5},
+        {'username':'Steve5013', 'EventName':'Architecture Class', 'Rating':5.0},
+        {'username':'Eric1337_Dance', 'EventName':'Ballet Course', 'Rating':5.0},
+        {'username':'karisnimmo99', 'EventName':'Ballet Course', 'Rating':5.0},
+        {'username':'jamesross', 'EventName':'Ballet Course', 'Rating':5.0},
+        {'username':'Eric1337_Dance', 'EventName':'Kai Dance School', 'Rating':5.0},
+        {'username':'rory00', 'EventName':'Kai Dance School', 'Rating':3.0},
+        {'username':'karisnimmo99', 'EventName':'Kai Dance School', 'Rating':4.5},
+        {'username':'Lisa_UMG', 'EventName':'Kai Dance School', 'Rating':5.0},
+        {'username':'Steve5013', 'EventName':'Kai Dance School', 'Rating':5.0},
+    ]
+
+    for r in ratings:
+        User_obj = User.objects.get(username=r['username'])
+        Event_obj = Event.objects.get(EventName=r['EventName'])
+        rating = EventRatings.objects.create(UserID=User_obj,EventID=Event_obj,Rating=r['Rating'])
+        print("Event rating added: " + str(r['Rating']) + " | '" + r['EventName'] + "' | '" + r['username'] + "'")
 
 if __name__ == '__main__':
     print('Initialising population script...')
