@@ -143,4 +143,4 @@ USE_TZ = False
 
 # Set login url
 
-LOGIN_URL = 'login/'
+LOGIN_URL = '/login/'
