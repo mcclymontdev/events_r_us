@@ -232,8 +232,11 @@ def manage_events(request):
 
 @login_required
 def edit_event(request, id):
-    org_event = Event.objects.get(EventID=id, UserID=request.user)
-    form = EventForm(request.POST or None, instance=org_event, initial={'Latitude':org_event.Latitude, 'Longitude':org_event.Longitude, 'Picture':org_event.Picture})
+    try:
+        org_event = Event.objects.get(EventID=id, UserID=request.user)
+        form = EventForm(request.POST or None, instance=org_event, initial={'Latitude':org_event.Latitude, 'Longitude':org_event.Longitude, 'Picture':org_event.Picture})
+    except:
+        form = None
 
     if request.method == 'POST':
         if form.is_valid():
