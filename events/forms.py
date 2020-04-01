@@ -97,16 +97,13 @@ class EventRatingsForm(forms.ModelForm):
         model = EventRatings
         fields = ('rating',)
         
-<<<<<<< HEAD
 class CommentForm(forms.ModelForm):
     Comment = forms.CharField(label='', widget = forms.Textarea(attrs = {'class': 'form-control', 'placeholer': 'Comment here', 'rows': 4, 'cols':50}), max_length = Comment.COMMENT_MAX_LENGTH)
     class Meta:
         model = Comment
         fields = ('Comment',)
-=======
         
 class EditProfileForm(UserChangeForm):
     class Meta:
         model = User
         fields = ('email','first_name','last_name',)
->>>>>>> 644d17589c4c8f4f3aafbe31b20d703c760b15a3
