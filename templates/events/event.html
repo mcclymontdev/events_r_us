@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/leaflet/1/leaflet.css" />
     <script src="https://cdn.jsdelivr.net/leaflet/1/leaflet.js"></script>
     <script src="{% static '/js/event_map.js' %}"></script>
+    <script src="{% static '/js/reply_button.js' %}"></script>
+
 {% endblock %}
 
 {% block body_block %}
@@ -40,12 +42,96 @@
         </div>
 
         <!--
-            TODO: Comment system :)
+            Comment system :)
         -->
-        <div id="comment-section">
-          <h4>COMMENTS</h4>
+		<div class="card-body">
+			<div id="comment-section">
+				<h4>{{ comments.count }} comments</h4>
+				<!--Comment display-->
+				{% for comment in comments %}
+				{% if not comment.ParentCommentID %}
+				<div class="comments mt-2">
+					<p class="font-weight-bold">
+            {% if comment.UserID == event.UserID %}
+						<p class = "font-weight-bold" style="color:green;">{{comment.UserID.username}}</p>
+            {% else %}
+            {{comment.UserID.username}}
+            {% endif %}
+						<span class="text-muted font-weight-normal">
+							{{comment.CreatedOn}}
+						</span>
+					</p>
+					{{comment.Comment | linebreaks }}
+					<!--Reply button-->
+					{% if user.is_authenticated %}
+					<footer class="blockquote-footer">
+						<button type="button" name="button" class="reply-btn btn btn-outline-dark btn-sm">Reply</button>
+					</footer>
+
+					<div class="replied-comments container mt-2" style="display:none">
+						<div class="from-group row">
+							<form method="post">
+								{% csrf_token %}
+								{{commentForm.as_p}}
+								<input type ="hidden" name="parent_id" value ="{{ comment.CommentID }}">
+								<input class="btn btn-outline-dark btn-sm" type="Submit" value="Submit">
+							</form>
+						</div>
+					</div>
+					{% endif %}
+					<!--Reply display-->
+					<div class = "relpies ml-4">
+					{% for reply in comment.replies.all %}
+						<p class = "font-weight-bold mt-2">
+              {% if reply.UserID == event.UserID %}
+  						<p class = "font-weight-bold" style="color:green;">{{reply.UserID.username}}</p>
+              {% else %}
+              {{reply.UserID.username}}
+              {% endif %}
+						<span class= "text-muted font-weight-normal">
+							{{reply.CreatedOn}}
+						</span>
+						</p>
+						{{reply.Comment | linebreaks }}
+						<!--Reply button-->
+						{% if user.is_authenticated %}
+						<footer class="blockquote-footer">
+							<button type="button" name="button" class="reply-btn btn btn-outline-dark btn-sm">Reply</button>
+						</footer>
+
+						<div class="replied-comments container mt-2" style="display:none">
+							<div class="from-group row">
+								<form method="post">
+									{% csrf_token %}
+									{{commentForm.as_p}}
+									<input type ="hidden" name="parent_id" value ="{{ reply.CommentID }}">
+									<input class="btn btn-outline-dark btn-sm" type="Submit" value="Submit">
+								</form>
+							</div>
+						</div>
+						{% endif %}
+					{% endfor %}
+					</div>
+				</div>
+				{% endif %}
+				{% endfor %}
+				{% if user.is_authenticated %}
+				<div class="card-body">
+					<h5>Leave a comment</h5>
+					<form method="post">
+						{% csrf_token %}
+						{{commentForm.as_p}}
+						<input type="submit" value="Submit">
+					</form>
+				</div>
+				{% else %}
+				<div class="row">
+					<p>You must be logged in to comment.</p>
+				</div>
+				{% endif %}
+			</div>
         </div>
-      </div>
+		</div>
 
       <!--
         Sidebar area

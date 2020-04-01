@@ -5,9 +5,11 @@ from django.contrib.auth import login as auth_login
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django_registration.views import RegistrationView
-from events.forms import UserForm, UserProfileForm, EventForm, SearchForm, EventRatingsForm,ProfileUpdateForm, EditProfileForm
+
+from events.forms import UserForm, UserProfileForm, EventForm, SearchForm, EventRatingsForm,ProfileUpdateForm, EditProfileForm, CommentForm
 from events.helpers import haversine
-from .models import User, Event, Category, EventRatings
+from .models import User, Event, Category, EventRatings, Comment
+
 from django.template import RequestContext
 from django.template import Context
 from django.http import HttpResponseRedirect
@@ -167,35 +169,86 @@ def show_event(request, id, event_slug):
     org_eventrating = None
     try:
         org_eventrating = EventRatings.objects.get(EventID=id, UserID=request.user)
-        form = EventRatingsForm(request.POST or None, initial={'rating':org_eventrating.Rating})
-        print(form.initial)
+        ratingsForm = EventRatingsForm(request.POST or None, initial={'rating':org_eventrating.Rating})
+        commentForm = CommentForm(request.POST or None)
+        print(ratingsForm.initial)
     except:
-         form = EventRatingsForm(request.POST or None)
+         ratingsForm = EventRatingsForm(request.POST or None)
+         commentForm = CommentForm(request.POST or None)
          print("New form")
 
     context_dict = {}
+    
+    #get comments
+    try:
+        comments = Comment.objects.filter(EventID = id)
+        context_dict['comments'] = comments
+    except:
+        comments = []
+        context_dict['comments'] = None
 
     # Form handling
     try:
-        context_dict['form'] = form
+        context_dict['form'] = ratingsForm
         context_dict['event'] = Event.objects.get(EventID=id, slug=event_slug)
+        context_dict['commentForm'] = commentForm
         if request.method == 'POST':
-            if form.is_valid():
+            if ratingsForm.is_valid():
                 try:
                     eventrating = EventRatings(
                         UserID=request.user, 
                         EventID=context_dict['event'],
-                        Rating=form.cleaned_data['rating']
+                        Rating=ratingsForm.cleaned_data['rating']
                         )
                     print(eventrating.Rating)
                     eventrating.save()
                 except:
-                    org_eventrating.Rating = form.cleaned_data['rating']
+                    org_eventrating.Rating = ratingsForm.cleaned_data['rating']
                     org_eventrating.save()
+                    
+            elif commentForm.is_valid():
+                parent_comment = None
+                # find the parent, if it exists
+                
+                
+                try:
+                    parent_id = int(request.POST.get('parent_id'))
+                except:
+                    parent_id = None
+                    
+                # Create the Comment object
+                new_comment = commentForm.save(commit = False)
+                # Assign the comment to the event
+                new_comment.EventID = context_dict['event']
+                # Give a local ID to the comment
+                new_comment.CommentID = len(comments) + 1
+                
+                if parent_id:
+                    parent_comment = Comment.objects.get(CommentID = parent_id)
+                    # ensure that a parent comment exists
+                    if not parent_comment:
+                        new_comment.ParentCommentID = None
+                    else:
+                        # edit the comment to refer to the parent
+                        new_comment.Comment = "@" + parent_comment.UserID.username + ' ' + new_comment.Comment
+                        # make the parent comment the first comment in the chain
+                        while parent_comment.ParentCommentID:
+                            parent_comment = parent_comment.ParentCommentID
+                        
+                        new_comment.ParentCommentID = parent_comment
+                    
+                else:
+                    new_comment.ParentCommentID = None
+                
+                # Assign comment to logged in user
+                new_comment.UserID = request.user
+                # Save to database
+                new_comment.save()
+                return redirect('events:show_event', id=id, event_slug=event_slug)
+                
             else:
-                print(form.errors)
-
-
+                print(ratingsForm.errors)
+                print(commentForm.errors)
 
         # Calculating total event rating
         all_ratings = EventRatings.objects.filter(EventID=context_dict['event'])
@@ -213,6 +266,10 @@ def show_event(request, id, event_slug):
     except Event.DoesNotExist:
         context_dict['event'] = None
         context_dict['form'] = None
+        context_dict['commentForm'] = None
+        context_dict['comments'] = None
+
+
 
     return render(request, 'events/event.html', context=context_dict)
 

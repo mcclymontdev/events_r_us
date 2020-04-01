@@ -2,7 +2,7 @@
 from django_registration.forms import RegistrationForm
 from django.contrib.auth.models import User
 from events.models import User
-from events.models import UserProfile, Event, Category, EventRatings
+from events.models import UserProfile, Event, Category, EventRatings, Comment
 from django import forms
 from django.contrib.auth.forms import UserChangeForm
 
@@ -97,6 +97,11 @@ class EventRatingsForm(forms.ModelForm):
         model = EventRatings
         fields = ('rating',)
         
+class CommentForm(forms.ModelForm):
+    Comment = forms.CharField(label='', widget = forms.Textarea(attrs = {'class': 'form-control', 'placeholer': 'Comment here', 'rows': 4, 'cols':50}), max_length = Comment.COMMENT_MAX_LENGTH)
+    class Meta:
+        model = Comment
+        fields = ('Comment',)
         
 class EditProfileForm(UserChangeForm):
     class Meta:

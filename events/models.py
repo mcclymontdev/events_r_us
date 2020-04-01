@@ -84,17 +84,30 @@ class UserProfile(models.Model):
         return self.user.Username
 
 class Comment(models.Model):
-    CommentID = models.AutoField(primary_key=True)
+    COMMENT_MAX_LENGTH = 200
+    CommentID = models.IntegerField(default=1)
     EventID = models.ForeignKey(Event, on_delete=models.CASCADE)
     UserID = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    Comment = models.CharField(max_length=200)
-    #ParentCommentID = models.ForeignKey(Comments, on_delete=models.CASCADE)
-    def __str__(self):
-        return self.CommentID 
+    Comment = models.CharField(max_length = COMMENT_MAX_LENGTH)
+    CreatedOn = models.DateTimeField(auto_now_add = True)
+    ParentCommentID = models.ForeignKey('self', on_delete=models.CASCADE, null = True, blank = True, related_name = 'replies')
     
+    def __str__(self):
+        return self.Comment
+    
+    class Meta:
+        ordering = ('CreatedOn',)
+        unique_together = ("CommentID", "EventID")
         
-        # validates the date ensuring it is not in past 
     def save(self, *args, **kwargs):
-        if self.date < datetime.date.today():
-            raise ValidationError("The date cannot be in the past!")
-            super(Event, self).save(*args, **kwargs)
+        
+        if self._state.adding:
+            try:
+                LastID = Comment.objects.order_by('CommentID').last().CommentID
+            except:
+                LastID = None
+                
+            if LastID is not None:
+                CommentID = LastID + 1
+        
+        super(Comment, self).save(*args, **kwargs)
