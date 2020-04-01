@@ -1,14 +1,29 @@
 {% extends "events/base.html" %}
 {% load static %}
+{% load add_attr %}
 {% block body_block %}
 
 {% if user.is_authenticated %}
 <div class="d-flex justify-content-center">
-<p></p>
-  <form id="profile_form" enctype="multipart/form-data" method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" class="btn btn-primary" name="" value="Update">
+  <form role="form" id="profile_form" method="post" enctype="multipart/form-data">
+      <h2 class="addedit-event-heading">Edit profile</h2>
+      {% csrf_token %}
+      {% for hidden in form.hidden_fields %}
+          {{ hidden }}
+      {% endfor %}
+      {% for field in form.visible_fields %}
+          {% if field.name == 'password' %}
+            <a class="btn btn-secondary" name="password" href="{% url 'events:change_password' %}">Change Password</a>
+            <br />
+          {% else %}
+              {{ field.errors }}
+              {{ field.label }}<br />
+              {{ field|add_attr:"class:form-control" }}
+              <br />
+          {% endif %}
+      {% endfor %}
+      <hr class="my-4">
+      <button class="btn btn-primary" type="submit" name="submit">Save changes</button>
   </form>
 </div>
 {% else %}
