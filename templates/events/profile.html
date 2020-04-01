@@ -5,7 +5,7 @@
 
 {% if user.is_authenticated %}
 <div class="d-flex justify-content-center">
-  <form role="form" id="profile_form" method="post" enctype="multipart/form-data">
+  <form role="form" id="edit-profile-form" method="post" enctype="multipart/form-data">
       <h2 class="addedit-event-heading">Edit profile</h2>
       {% csrf_token %}
       {% for hidden in form.hidden_fields %}
