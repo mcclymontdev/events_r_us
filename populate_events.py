@@ -7,7 +7,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'events_r_us.settings')
 import django
 django.setup()
 
-from events.models import Category, Event, EventRatings
+from events.models import Category, Event, EventRatings, Comment
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 
@@ -134,6 +134,10 @@ def populate():
         rating = EventRatings.objects.create(UserID=User_obj,EventID=Event_obj,Rating=r['Rating'])
         print("Event rating added: " + str(r['Rating']) + " | '" + r['EventName'] + "' | '" + r['username'] + "'")
 
+    comments = [
+        {'username':'Eric1337_Dance', 'EventName':'EricDanceCo', 'Comment':3.0, 'CommentID'="Test comment 1"},
+        {'username':'Steve5013', 'EventName':'EricDanceCo', 'Comment':3.0, 'CommentID'="Test comment 1"},
+    ]
 if __name__ == '__main__':
     print('Initialising population script...')
     populate()
