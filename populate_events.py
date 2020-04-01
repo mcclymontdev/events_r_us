@@ -135,9 +135,42 @@ def populate():
         print("Event rating added: " + str(r['Rating']) + " | '" + r['EventName'] + "' | '" + r['username'] + "'")
 
     comments = [
-        {'username':'Eric1337_Dance', 'EventName':'EricDanceCo', 'Comment':3.0, 'CommentID'="Test comment 1"},
-        {'username':'Steve5013', 'EventName':'EricDanceCo', 'Comment':3.0, 'CommentID'="Test comment 1"},
+        {'username':'Steve5013', 'EventName':'EricDanceCo', 'Comment':"How often is the class?", 'CommentID':1, 'ParentCommentID':None},
+        {'username':'Eric1337_Dance', 'EventName':'EricDanceCo', 'Comment':"Every day", 'CommentID':2, 'ParentCommentID':1},
+        {'username':'Lisa_UMG', 'EventName':'EricDanceCo', 'Comment':"I love it.", 'CommentID':3, 'ParentCommentID':None},
+
+        {'username':'Steve5013', 'EventName':'Rap Class', 'Comment':"I'm not a fan of this rap malarkey brother.", 'CommentID':1, 'ParentCommentID':None},
+        {'username':'Lisa_UMG', 'EventName':'Rap Class', 'Comment':"Get good Stevo.", 'CommentID':2, 'ParentCommentID':1},
+
+        {'username':'Eric1337_Dance', 'EventName':'Concert Buddy', 'Comment':"I have no friends, anyone up for the task?", 'CommentID':1, 'ParentCommentID':None},
+        {'username':'rory00', 'EventName':'Concert Buddy', 'Comment':"Anyone but big Eric please", 'CommentID':2, 'ParentCommentID':None},
+
+        {'username':'rory00', 'EventName':'workout friends', 'Comment':"Sounds good", 'CommentID':1, 'ParentCommentID':None},
+        {'username':'karisnimmo99', 'EventName':'workout friends', 'Comment':"Do you have more information?", 'CommentID':2, 'ParentCommentID':None},
+
+        {'username':'rory00', 'EventName':'Kai Dance School', 'Comment':"Sounds good", 'CommentID':1, 'ParentCommentID':None},
+        {'username':'karisnimmo99', 'EventName':'Kai Dance School', 'Comment':"Do you have more information?", 'CommentID':2, 'ParentCommentID':None},
+
+        {'username':'Steve5013', 'EventName':'FelixRave', 'Comment':"Back in my day we would bang on drums in a field!", 'CommentID':1, 'ParentCommentID':None},
+        {'username':'Lisa_UMG', 'EventName':'FelixRave', 'Comment':"Ok boomer", 'CommentID':2, 'ParentCommentID':1},
+
+        {'username':'Steve5013', 'EventName':'Architecture Class', 'Comment':"help I can't draw", 'CommentID':1, 'ParentCommentID':None},
+
+        {'username':'Steve5013', 'EventName':'Fix_on', 'Comment':"Finally a real class for real men like me!", 'CommentID':1, 'ParentCommentID':None},
+        {'username':'karisnimmo99', 'EventName':'Fix_on', 'Comment':"No problem, Steve.", 'CommentID':2, 'ParentCommentID':1},
     ]
+
+    for c in comments:
+        User_obj = User.objects.get(username=c['username'])
+        Event_obj = Event.objects.get(EventName=c['EventName'])
+        if c['ParentCommentID'] != None:
+            parent_obj = Comment.objects.get(CommentID=c['ParentCommentID'], EventID=Event_obj)
+            comment = Comment.objects.create(UserID=User_obj,EventID=Event_obj,Comment=c['Comment'], CommentID=c['CommentID'], ParentCommentID=parent_obj)
+            print("Comment added: " + str(c['ParentCommentID']) + "->" + str(c['CommentID']) + " | '" + c['EventName'] + "' | '" + c['username'] + "'")
+        else:
+            comment = Comment.objects.create(UserID=User_obj,EventID=Event_obj,Comment=c['Comment'], CommentID=c['CommentID'])
+            print("Comment added: " + str(c['CommentID']) + " | '" + c['EventName'] + "' | '" + c['username'] + "'")
+
 if __name__ == '__main__':
     print('Initialising population script...')
     populate()
