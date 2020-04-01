@@ -51,12 +51,15 @@
         </div>
         <div class="navbar-collapse flex-grow-1 text-right">
             <ul class="navbar-nav ml-auto flex-nowrap font-weight-bold text-uppercase">
+                <li class="nav-item">
+                    <a href="{% url 'events:about' %}" class="nav-link m-2">About</a>
+                </li>
                 {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a href="{% url 'events:manage_events' %}" class="nav-link m-2">Manage Events</a>
                 </li>
 				<li class="nav-item">
-                    <a href="/events/account" class="nav-link m-2">Account</a>
+                    <a href="{% url 'events:profile' %}" class="nav-link m-2">Account</a>
                 </li>
 				<li class="nav-item">
                     <a href="{% url 'events:logout' %}" class="nav-link m-2">Sign Out</a>

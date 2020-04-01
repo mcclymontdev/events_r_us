@@ -136,3 +136,11 @@ STATICFILES_DIRS = [STATIC_DIR, ]
 
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
+
+# We don't use timezones in our application
+
+USE_TZ = False
+
+# Set login url
+
+LOGIN_URL = 'login/'

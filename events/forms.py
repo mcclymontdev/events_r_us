@@ -48,7 +48,7 @@ class UserProfileForm(forms.ModelForm):
 
 class EventForm(forms.ModelForm):
     EventName = forms.CharField(label='Event name', max_length=Event.NAME_MAX_LENGTH,help_text="Please enter the event name.")
-    Description = forms.CharField(label='Description', max_length=Event.DESCRIPTION_MAX_LENGTH,help_text="Please enter a description for the event.")
+    Description = forms.CharField(label='Description', max_length=Event.DESCRIPTION_MAX_LENGTH,help_text="Please enter a description for the event.", widget=forms.Textarea(attrs={"rows":5, "cols":20}))
     Picture = forms.ImageField(label='Event picture')
     
     DateTime = forms.DateTimeField(label='Date and time',
