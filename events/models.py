@@ -85,7 +85,7 @@ class UserProfile(models.Model):
 
 class Comment(models.Model):
     COMMENT_MAX_LENGTH = 200
-    CommentID = models.AutoField(primary_key=True)
+    CommentID = models.IntegerField(default=1)
     EventID = models.ForeignKey(Event, on_delete=models.CASCADE)
     UserID = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     Comment = models.CharField(max_length = COMMENT_MAX_LENGTH)
@@ -100,4 +100,14 @@ class Comment(models.Model):
         unique_together = ("CommentID", "EventID")
         
     def save(self, *args, **kwargs):
+        
+        if self._state.adding:
+            try:
+                LastID = Comment.objects.order_by('CommentID').last().CommentID
+            except:
+                LastID = None
+                
+            if LastID is not None:
+                CommentID = LastID + 1
+        
         super(Comment, self).save(*args, **kwargs)
