@@ -135,9 +135,21 @@ def populate():
         print("Event rating added: " + str(r['Rating']) + " | '" + r['EventName'] + "' | '" + r['username'] + "'")
 
     comments = [
-        {'username':'Eric1337_Dance', 'EventName':'EricDanceCo', 'Comment':3.0, 'CommentID'="Test comment 1"},
-        {'username':'Steve5013', 'EventName':'EricDanceCo', 'Comment':3.0, 'CommentID'="Test comment 1"},
+        {'username':'Steve5013', 'EventName':'EricDanceCo', 'Comment':"How often is the class?", 'CommentID':1, 'ParentCommentID':None},
+        {'username':'Eric1337_Dance', 'EventName':'EricDanceCo', 'Comment':"Every day", 'CommentID':2, 'ParentCommentID':1},
     ]
+
+    for c in comments:
+        User_obj = User.objects.get(username=c['username'])
+        Event_obj = Event.objects.get(EventName=c['EventName'])
+        if c['ParentCommentID'] != None:
+            parent_obj = Comment.objects.get(CommentID=c['ParentCommentID'])
+            comment = Comment.objects.create(UserID=User_obj,EventID=Event_obj,Comment=c['Comment'], CommentID=c['CommentID'], ParentCommentID=parent_obj)
+            print("Comment added: " + str(c['ParentCommentID']) + "->" + str(c['CommentID']) + " | '" + r['EventName'] + "' | '" + r['username'] + "'")
+        else:
+            comment = Comment.objects.create(UserID=User_obj,EventID=Event_obj,Comment=c['Comment'], CommentID=c['CommentID'])
+            print("Comment added: " + str(c['CommentID']) + " | '" + r['EventName'] + "' | '" + r['username'] + "'")
+
 if __name__ == '__main__':
     print('Initialising population script...')
     populate()
