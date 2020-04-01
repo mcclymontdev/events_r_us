@@ -133,6 +133,7 @@ def search(request):
 
     return render(request, 'events/search.html', {'form': form})
     
+@login_required
 def add_event(request):
     form = EventForm()
 
@@ -218,6 +219,7 @@ def show_event(request, id, event_slug):
 def account(request):
     return render(request, 'events/login.html')
 
+@login_required
 def manage_events(request):
     context_dict = {}
 
@@ -228,6 +230,7 @@ def manage_events(request):
     
     return render(request, 'events/manage_events.html', context=context_dict)
 
+@login_required
 def edit_event(request, id):
     org_event = Event.objects.get(EventID=id, UserID=request.user)
     form = EventForm(request.POST or None, instance=org_event, initial={'Latitude':org_event.Latitude, 'Longitude':org_event.Longitude, 'Picture':org_event.Picture})
@@ -239,6 +242,7 @@ def edit_event(request, id):
 
     return render(request, 'events/edit_event.html', {'form': form, 'id':id})
 
+@login_required
 def delete_event(request, id):
     context_dict = {}
 
@@ -252,7 +256,7 @@ def delete_event(request, id):
 
     return render(request, 'events/delete_status.html', context_dict)
     
-    
+@login_required
 def edit_profile(request):
     if request.method == "POST":
         form = EditProfileForm(request.POST, instance=request.user)
@@ -265,6 +269,7 @@ def edit_profile(request):
         args={'form':form}
         return render(request, 'events/profile.html',args)
     
+@login_required
 def change_password(request):
     if request.method == "POST":
         form = PasswordChangeForm(data = request.POST, user=request.user)

@@ -53,6 +53,10 @@
   padding-top: 50px;
 }
 
+#edit-profile-form{
+  width: 20em;
+}
+
 #signin {
   color: white;
 }
