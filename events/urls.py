@@ -17,4 +17,5 @@ urlpatterns = [
     path('event/<int:id>/delete', views.delete_event, name='delete_event'),
     path('edit_profile', views.edit_profile, name='profile'),
     path('password', views.change_password, name='change_password'),
+    path('event/<int:id>/<slug:event_slug>/deletecomment/<int:comment_id>', views.delete_comment, name = 'delete_comment'),
 ]
