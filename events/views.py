@@ -224,7 +224,7 @@ def show_event(request, id, event_slug):
                 new_comment.CommentID = len(comments) + 1
                 
                 if parent_id:
-                    parent_comment = Comment.objects.get(CommentID = parent_id)
+                    parent_comment = Comment.objects.get(CommentID = parent_id, EventID = new_comment.EventID)
                     # ensure that a parent comment exists
                     if not parent_comment:
                         new_comment.ParentCommentID = None
@@ -346,4 +346,25 @@ def change_password(request):
         form = PasswordChangeForm(user=request.user)
         args = {'form':form}
         return render(request, 'events/change_password.html',args)
+    
+@login_required
+def delete_comment(request, id, event_slug, comment_id):
+    context_dict = {}
+    context_dict['event'] = Event.objects.get(EventID=id, slug=event_slug)
+    try:
+        comment = Comment.objects.get(CommentID = comment_id, EventID = context_dict['event'])
+        context_dict['comment'] = comment
+        #double check the user made the comment
+        if request.user == comment.UserID:
+            comment.delete()
+            context_dict['status'] = 1
+        else:
+            context_dict['status'] = 3
+    
+    except:
+        context_dict['status'] = 2
+        
+    
+
+    return render(request, 'events/delete_comment.html', context_dict)
     
