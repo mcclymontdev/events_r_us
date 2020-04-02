@@ -2,7 +2,7 @@
 from django_registration.forms import RegistrationForm
 from django.contrib.auth.models import User
 from events.models import User
-from events.models import UserProfile, Event, Category, EventRatings, Comment
+from events.models import Event, Category, EventRatings, Comment
 from django import forms
 from django.contrib.auth.forms import UserChangeForm
 
@@ -40,11 +40,6 @@ class ProfileUpdateForm(forms.ModelForm):
             user.save()
 
         return user
-        
-class UserProfileForm(forms.ModelForm):
-	class Meta:
-		model = UserProfile
-		fields = UserProfilefields = ()
 
 class EventForm(forms.ModelForm):
     EventName = forms.CharField(label='Event name', max_length=Event.NAME_MAX_LENGTH,help_text="Please enter the event name.")

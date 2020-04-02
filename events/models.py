@@ -34,7 +34,6 @@ class Event(models.Model):
     
     DateTime = models.DateTimeField(default=django.utils.timezone.now)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    Rating = models.IntegerField(default=0)
 
     EVENT_TYPES = (
         ('One-off','One-off'),
@@ -73,15 +72,6 @@ class EventRatings(models.Model):
         verbose_name = 'Event ratings'
         verbose_name_plural = 'Event ratings'
         unique_together = ("UserID", "EventID")
-
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-    picture = models.ImageField(upload_to='profile_image', blank=True)
-    location = models.CharField(max_length=60, blank=True)
-
-    def __str__(self):
-        return self.user.Username
 
 class Comment(models.Model):
     COMMENT_MAX_LENGTH = 200
