@@ -9,8 +9,8 @@ $(document).ready(function() {
     var Longitude = document.getElementById("Longitude").value;
 
     // Setup our map layer.
-    var osm_bright = new L.TileLayer(
-        'https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png', {
+    var OSMDefault = new L.TileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             minZoom: 10,
             maxZoom: 15,
             attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
@@ -21,7 +21,7 @@ $(document).ready(function() {
 
     // Initialise map.
     map.setView([0, 0], 1);
-    map.addLayer(osm_bright);
+    map.addLayer(OSMDefault);
 
     // Create event marker, add it to the map and push it to our markers array.
     var marker = L.marker([Latitude,Longitude]);
