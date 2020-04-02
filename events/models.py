@@ -9,13 +9,18 @@ from django.conf import settings
 
 from django.template.defaultfilters import slugify
 
-# Create your models here.
+"""
+Stores category names.
+"""
 class Category(models.Model):
     Name = models.CharField(max_length=30,primary_key=True)
     class Meta: verbose_name_plural = 'Categories'
     def __str__(self):
         return self.Name
 
+"""
+Event model, contains all the information on user created events.
+"""
 class Event(models.Model):
     NAME_MAX_LENGTH = 100
     DESCRIPTION_MAX_LENGTH = 1250
@@ -34,7 +39,6 @@ class Event(models.Model):
     
     DateTime = models.DateTimeField(default=django.utils.timezone.now)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    Rating = models.IntegerField(default=0)
 
     EVENT_TYPES = (
         ('One-off','One-off'),
@@ -51,6 +55,9 @@ class Event(models.Model):
     def __str__(self):
         return self.EventName
 
+"""
+Table for storing user ratings of events.
+"""
 class EventRatings(models.Model):
     RatingChoices = [
         (0.5, 0.5),
@@ -74,15 +81,9 @@ class EventRatings(models.Model):
         verbose_name_plural = 'Event ratings'
         unique_together = ("UserID", "EventID")
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-    picture = models.ImageField(upload_to='profile_image', blank=True)
-    location = models.CharField(max_length=60, blank=True)
-
-    def __str__(self):
-        return self.user.Username
-
+"""
+Table for storing comment data from users.
+"""
 class Comment(models.Model):
     COMMENT_MAX_LENGTH = 200
     CommentID = models.IntegerField(default=1)

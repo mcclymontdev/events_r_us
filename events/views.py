@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django_registration.views import RegistrationView
 
-from events.forms import UserForm, UserProfileForm, EventForm, SearchForm, EventRatingsForm,ProfileUpdateForm, EditProfileForm, CommentForm
+from events.forms import EventForm, SearchForm, EventRatingsForm, EditProfileForm, CommentForm
 from events.helpers import haversine
 from .models import User, Event, Category, EventRatings, Comment
 
@@ -15,41 +15,29 @@ from django.template import Context
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import UserChangeForm,PasswordChangeForm
 
+"""
+Simple view to return the index/home page.
+"""
 def index(request):
     form = SearchForm()
     return render(request, 'events/index.html', {'form' : form})
 
+"""
+Simple view to return the about page.
+"""
 def about(request):
     return render(request, 'events/about.html')
 
-def signup(request):
-	registered = False
-	
-	if request.method == 'POST':
-		user_form = UserForm(request.POST)
-		profile_form = UserProfileForm(request.POST)
-
-		if user_form.is_valid() and profile_form.is_valid():
-			user = user_form.save()
-			user.set_password(user.password)
-			user.save()
-			
-			profile = profile_form.save(commit=False)
-			profile.user = user
-			profile.save()
-			
-			registered = True
-		else:
-			print(user_form.errors, profile_form.errors)
-	else:
-		user_form = UserForm()
-		profile_form = UserProfileForm()
-	return render(request, 'events/sign-up.html', context = {'user_form': user_form, 'profile_form' : profile_form, 'registered':registered})
-
+"""
+This view allows the user to logout of their account
+"""
 def user_logout(request):
     logout(request)
     return redirect(reverse('events:index'))
     
+"""
+This view allows the user to login.
+"""
 def login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -69,6 +57,10 @@ def login(request):
     else:
         return render(request, 'events/login.html')
 
+
+"""
+This view processes the search logic and passes the relevant results to the template for display.
+"""
 def search(request):
     form = SearchForm()
 
@@ -94,13 +86,10 @@ def search(request):
             query = Event.objects.all()
 
             # Filter events based on refined search options
-            print("Initial query: " + str(query))
             if category != None:
                 query = query.filter(category = category)
-                print("category: " + str(query))
             if (eventType != "" and eventType != "Any"):
                 query = query.filter(eventType = eventType)
-                print("eventType: " + str(query))
 
             # Event name keyword search
             if keywords != "":
@@ -109,8 +98,6 @@ def search(request):
 
             if sortBy == "Date occuring":
                 query = query.order_by('DateTime')
-                print("sortBy: " + str(query))
-            print("Final query: " + str(query))
 
             # For context dictionary
             events = []
@@ -135,6 +122,9 @@ def search(request):
 
     return render(request, 'events/search.html', {'form': form})
     
+"""
+Allows the user to add a new event.
+"""
 @login_required
 def add_event(request):
     form = EventForm()
@@ -143,7 +133,6 @@ def add_event(request):
         form = EventForm(request.POST, request.FILES)
 
         if form.is_valid():
-            print(form.cleaned_data)
             event = Event(
                 UserID=request.user, 
                 EventName=form.cleaned_data["EventName"],
@@ -155,7 +144,6 @@ def add_event(request):
                 DateTime=form.cleaned_data["DateTime"],
                 category=form.cleaned_data["CategoryList"],
                 eventType=form.cleaned_data["eventType"],
-                Rating=0,
                 )
             event.save()
             return redirect(reverse('events:index'))
@@ -164,6 +152,10 @@ def add_event(request):
         
     return render(request, 'events/add_event.html', {'form': form})
 
+
+"""
+This view displays the requested event to the user.
+"""
 def show_event(request, id, event_slug):
     # Setting up form
     org_eventrating = None
@@ -171,11 +163,9 @@ def show_event(request, id, event_slug):
         org_eventrating = EventRatings.objects.get(EventID=id, UserID=request.user)
         ratingsForm = EventRatingsForm(request.POST or None, initial={'rating':org_eventrating.Rating})
         commentForm = CommentForm(request.POST or None)
-        print(ratingsForm.initial)
     except:
          ratingsForm = EventRatingsForm(request.POST or None)
          commentForm = CommentForm(request.POST or None)
-         print("New form")
 
     context_dict = {}
     
@@ -200,7 +190,6 @@ def show_event(request, id, event_slug):
                         EventID=context_dict['event'],
                         Rating=ratingsForm.cleaned_data['rating']
                         )
-                    print(eventrating.Rating)
                     eventrating.save()
                 except:
                     org_eventrating.Rating = ratingsForm.cleaned_data['rating']
@@ -273,9 +262,9 @@ def show_event(request, id, event_slug):
 
     return render(request, 'events/event.html', context=context_dict)
 
-def account(request):
-    return render(request, 'events/login.html')
-
+"""
+Displays all of the users events in a grid and allows them to add a new event edit/delete existing events.
+"""
 @login_required
 def manage_events(request):
     context_dict = {}
@@ -287,11 +276,16 @@ def manage_events(request):
     
     return render(request, 'events/manage_events.html', context=context_dict)
 
+
+"""
+Allows the user to edit an existing event.
+Modifies an existing event object.
+"""
 @login_required
 def edit_event(request, id):
     try:
         org_event = Event.objects.get(EventID=id, UserID=request.user)
-        form = EventForm(request.POST or None, instance=org_event, initial={'Latitude':org_event.Latitude, 'Longitude':org_event.Longitude, 'Picture':org_event.Picture})
+        form = EventForm(request.POST or None, request.FILES or None, instance=org_event, initial={'Latitude':org_event.Latitude, 'Longitude':org_event.Longitude, 'Picture':org_event.Picture})
     except:
         form = None
 
@@ -302,6 +296,9 @@ def edit_event(request, id):
 
     return render(request, 'events/edit_event.html', {'form': form, 'id':id})
 
+"""
+Deletes the requested event and displays a message to the user if the deletion was successful or not.
+"""
 @login_required
 def delete_event(request, id):
     context_dict = {}
@@ -316,6 +313,9 @@ def delete_event(request, id):
 
     return render(request, 'events/delete_status.html', context_dict)
     
+"""
+Allows the user to edit their profile details.
+"""
 @login_required
 def edit_profile(request):
     if request.method == "POST":
@@ -323,12 +323,15 @@ def edit_profile(request):
         
         if form.is_valid():
             form.save()
-            return redirect(reverse('events:index'))
+            return redirect(reverse('events:profile'))
     else:
         form = EditProfileForm(instance=request.user)
         args={'form':form}
         return render(request, 'events/profile.html',args)
     
+"""
+Allows the user to change their account password.
+"""
 @login_required
 def change_password(request):
     if request.method == "POST":
@@ -339,7 +342,6 @@ def change_password(request):
             return redirect('events:index')
             
         else:
-            form = PasswordChangeForm(user=request.user)
             args = {'form':form}
             return render(request, 'events/change_password.html',args)
     else:
@@ -363,8 +365,5 @@ def delete_comment(request, id, event_slug, comment_id):
     
     except:
         context_dict['status'] = 2
-        
-    
 
     return render(request, 'events/delete_comment.html', context_dict)
-    

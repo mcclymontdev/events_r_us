@@ -2,50 +2,13 @@
 from django_registration.forms import RegistrationForm
 from django.contrib.auth.models import User
 from events.models import User
-from events.models import UserProfile, Event, Category, EventRatings, Comment
+from events.models import Event, Category, EventRatings, Comment
 from django import forms
 from django.contrib.auth.forms import UserChangeForm
-
-class UserForm(forms.ModelForm):
-	password=forms.CharField(widget=forms.PasswordInput())
-	
-	class Meta:
-		model = User
-		fields = ('username', 'email', 'password',)
         
-        
-class ProfileUpdateForm(forms.ModelForm):
-    username = forms.CharField(required=True)
-    email = forms.EmailField(required=True)
-    first_name = forms.CharField(label='first name; ')
-    last_name = forms.CharField(required=False)
-
-    class Meta:
-        model = User
-        fields = ('username', 'email', 'first_name', 'last_name')
-
-    def clean_email(self):
-        username = self.cleaned_data.get('username')
-        email = self.cleaned_data.get('email')
-
-        if email and User.objects.filter(email=email).exclude(username=username).count():
-            raise forms.ValidationError('This email address is already in use. Please supply a different email address.')
-        return email
-
-    def save(self, commit=True):
-        user = super(RegistrationForm, self).save(commit=False)
-        user.email = self.cleaned_data['email']
-
-        if commit:
-            user.save()
-
-        return user
-        
-class UserProfileForm(forms.ModelForm):
-	class Meta:
-		model = UserProfile
-		fields = UserProfilefields = ()
-
+"""
+Form that is used to add/edit user events.
+"""
 class EventForm(forms.ModelForm):
     EventName = forms.CharField(label='Event name', max_length=Event.NAME_MAX_LENGTH,help_text="Please enter the event name.")
     Description = forms.CharField(label='Description', max_length=Event.DESCRIPTION_MAX_LENGTH,help_text="Please enter a description for the event.", widget=forms.Textarea(attrs={"rows":5, "cols":20}))
@@ -76,6 +39,9 @@ class EventForm(forms.ModelForm):
         model = Event
         fields = ('EventName','Description','Address', 'Picture', 'DateTime', 'CategoryList')
 
+"""
+Form used for searching events.
+"""
 class SearchForm(forms.Form):
     Latitude = forms.DecimalField(widget=forms.HiddenInput(), max_digits=22, decimal_places=16)
     Longitude = forms.DecimalField(widget=forms.HiddenInput(), max_digits=22, decimal_places=16)
@@ -90,6 +56,9 @@ class SearchForm(forms.Form):
         super(SearchForm, self).__init__(*args, **kwargs)
         self.fields['category'].empty_label = "Any"
 
+"""
+Form for rating events
+"""
 class EventRatingsForm(forms.ModelForm):
     rating = forms.DecimalField(widget=forms.RadioSelect(choices=EventRatings.RatingChoices), max_digits=2, decimal_places=1)
 
@@ -97,12 +66,18 @@ class EventRatingsForm(forms.ModelForm):
         model = EventRatings
         fields = ('rating',)
         
+"""
+Comment form for events
+"""
 class CommentForm(forms.ModelForm):
     Comment = forms.CharField(label='', widget = forms.Textarea(attrs = {'class': 'form-control', 'placeholer': 'Comment here', 'rows': 4, 'cols':50}), max_length = Comment.COMMENT_MAX_LENGTH)
     class Meta:
         model = Comment
         fields = ('Comment',)
         
+"""
+User account detail change form
+"""
 class EditProfileForm(UserChangeForm):
     class Meta:
         model = User
