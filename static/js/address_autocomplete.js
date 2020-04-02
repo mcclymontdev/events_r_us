@@ -7,6 +7,11 @@
         value: function(suggestion) {
           return suggestion.name;
         }
+      },
+      accessibility: {
+        pinButton: {
+          'style': 'display: none;',
+        },
       }
     }).configure({
       type: 'address'

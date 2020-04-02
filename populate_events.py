@@ -7,7 +7,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'events_r_us.settings')
 import django
 django.setup()
 
-from events.models import Category, Event, EventRatings
+from events.models import Category, Event, EventRatings, Comment
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 
@@ -60,19 +60,19 @@ def populate():
 
     events = [
         {'username':'Eric1337_Dance', 'EventName':'EricDanceCo', 'Description':event_desc[0], 'Picture':'dance.png', 'Address':'53 Morrison St', 'Latitude':'55.853673', 'Longitude':'-4.268097', 'category':'Fitness','eventType':'Recurring','DateTime':'2020-05-03 11:35'},
-        {'username':'Lisa_UMG', 'EventName':'Rap Class', 'Description':event_desc[1], 'Picture':'rap.png', 'Address':'7 langley st', 'Latitude':'51.5134', 'Longitude':'-0.1251', 'category':'Class/Workshop','eventType':'Recurring','DateTime':'2020-04-15 16:30'},
-        {'username':'Lisa_UMG', 'EventName':'Concert Buddy', 'Description':event_desc[2], 'Picture':'concertBuddy.png', 'Address':'4 Park Road', 'Latitude':'51.5579', 'Longitude':'0.0840', 'category':'Concert','eventType':'Recurring','DateTime':'2020-04-09 13:12'},
-        {'username':'Lisa_UMG', 'EventName':'Kpop Party', 'Description':event_desc[3], 'Picture':'kpopParty.png', 'Address':'61 Church Street', 'Latitude':'53.3823', 'Longitude':'-1.4713', 'category':'Entertainment','eventType':'Recurring','DateTime':'2020-04-23 20:20'},
+        {'username':'Lisa_UMG', 'EventName':'Rap Class', 'Description':event_desc[1], 'Picture':'rap.png', 'Address':'7 langley st', 'Latitude':'51.5134', 'Longitude':'-0.1251', 'category':'Class/Workshop','eventType':'One-off','DateTime':'2020-04-15 16:30'},
+        {'username':'Lisa_UMG', 'EventName':'Concert Buddy', 'Description':event_desc[2], 'Picture':'concertBuddy.png', 'Address':'4 Park Road', 'Latitude':'51.5579', 'Longitude':'0.0840', 'category':'Concert','eventType':'One-off','DateTime':'2020-04-09 13:12'},
+        {'username':'Lisa_UMG', 'EventName':'Kpop Party', 'Description':event_desc[3], 'Picture':'kpopParty.png', 'Address':'61 Church Street', 'Latitude':'53.3823', 'Longitude':'-1.4713', 'category':'Entertainment','eventType':'One-off','DateTime':'2020-04-23 20:20'},
         {'username':'Steve5013', 'EventName':'3Racha', 'Description':event_desc[4], 'Picture':'3racha.png', 'Address':'32 North street', 'Latitude':'53.1288', 'Longitude':'-1.2580', 'category':'Class/Workshop','eventType':'Recurring','DateTime':'2020-04-10 10:00'},
         {'username':'Steve5013', 'EventName':'workout friends', 'Description':event_desc[5], 'Picture':'workout.png', 'Address':'83 Mayfield Road', 'Latitude':'55.9297', 'Longitude':'-3.1754', 'category':'Fitness','eventType':'Recurring','DateTime':'2020-05-27 17:45'},
         {'username':'karisnimmo99', 'EventName':'FelixRave', 'Description':event_desc[6], 'Picture':'felixRave.png', 'Address':'17 st. Johns Road', 'Latitude':'55.8414', 'Longitude':'-4.2838', 'category':'Concert','eventType':'Recurring','DateTime':'2020-04-18 22:30'},
-        {'username':'karisnimmo99', 'EventName':'ChansKitchen', 'Description':event_desc[7], 'Picture':'chansKitchen.png', 'Address':'22 School Lane', 'Latitude':'52.5070', 'Longitude':'-0.4122', 'category':'Food','eventType':'Recurring','DateTime':'2020-04-09 14:50'},
+        {'username':'karisnimmo99', 'EventName':'ChansKitchen', 'Description':event_desc[7], 'Picture':'chansKitchen.png', 'Address':'22 School Lane', 'Latitude':'52.5070', 'Longitude':'-0.4122', 'category':'Food','eventType':'One-off','DateTime':'2020-04-09 14:50'},
         {'username':'karisnimmo99', 'EventName':'Fix_on', 'Description':event_desc[8], 'Picture':'wood.png', 'Address':'6 Grainge Road', 'Latitude':'50.4036', 'Longitude':'-4.1251', 'category':'Class/Workshop','eventType':'Recurring','DateTime':'2020-06-05 14:00'},
         {'username':'Lisa_UMG', 'EventName':'80sNight', 'Description':event_desc[9], 'Picture':'80s.png', 'Address':'3 Alexandra Rd', 'Latitude':'52.2354', 'Longitude':'-3.3807', 'category':'Concert','eventType':'Recurring','DateTime':'2020-07-09 19:00'},
         {'username':'Lisa_UMG', 'EventName':'Hikers', 'Description':event_desc[10], 'Picture':'hike.png', 'Address':'36 West Street', 'Latitude':'53.5233', 'Longitude':'-1.4093', 'category':'Fitness','eventType':'Recurring','DateTime':'2020-04-13 10:00'},
-        {'username':'Lisa_UMG', 'EventName':'Architecture Class', 'Description':event_desc[11], 'Picture':'architecture.png', 'Address':'518 The Green', 'Latitude':'51.4593', 'Longitude':'-3.2121', 'category':'Class/Workshop','eventType':'Recurring','DateTime':'2020-05-02 13:00'},
+        {'username':'Lisa_UMG', 'EventName':'Architecture Class', 'Description':event_desc[11], 'Picture':'architecture.png', 'Address':'518 The Green', 'Latitude':'51.4593', 'Longitude':'-3.2121', 'category':'Class/Workshop','eventType':'One-off','DateTime':'2020-05-02 13:00'},
         {'username':'Eric1337_Dance', 'EventName':'Ballet Course', 'Description':event_desc[12], 'Picture':'ballet.png', 'Address':'27 Richmond Road', 'Latitude':'52.4785', 'Longitude':'-1.8137', 'category':'Fitness','eventType':'Recurring','DateTime':'2020-04-08 18:15'},
-        {'username':'Eric1337_Dance', 'EventName':'Kai Dance School', 'Description':event_desc[13], 'Picture':'kai.png', 'Address':'56 Kingsway', 'Latitude':'51.4676', 'Longitude':'-0.2753', 'category':'Fitness','eventType':'Recurring','DateTime':'2020-06-09 08:45'},
+        {'username':'Eric1337_Dance', 'EventName':'Kai Dance School', 'Description':event_desc[13], 'Picture':'kai.png', 'Address':'56 Kingsway', 'Latitude':'51.4676', 'Longitude':'-0.2753', 'category':'Fitness','eventType':'One-off','DateTime':'2020-06-09 08:45'},
     ]
     
     for e in events:
@@ -133,6 +133,43 @@ def populate():
         Event_obj = Event.objects.get(EventName=r['EventName'])
         rating = EventRatings.objects.create(UserID=User_obj,EventID=Event_obj,Rating=r['Rating'])
         print("Event rating added: " + str(r['Rating']) + " | '" + r['EventName'] + "' | '" + r['username'] + "'")
+
+    comments = [
+        {'username':'Steve5013', 'EventName':'EricDanceCo', 'Comment':"How often is the class?", 'CommentID':1, 'ParentCommentID':None},
+        {'username':'Eric1337_Dance', 'EventName':'EricDanceCo', 'Comment':"Every day", 'CommentID':2, 'ParentCommentID':1},
+        {'username':'Lisa_UMG', 'EventName':'EricDanceCo', 'Comment':"I love it.", 'CommentID':3, 'ParentCommentID':None},
+
+        {'username':'Steve5013', 'EventName':'Rap Class', 'Comment':"I'm not a fan of this rap malarkey brother.", 'CommentID':1, 'ParentCommentID':None},
+        {'username':'Lisa_UMG', 'EventName':'Rap Class', 'Comment':"Get good Stevo.", 'CommentID':2, 'ParentCommentID':1},
+
+        {'username':'Eric1337_Dance', 'EventName':'Concert Buddy', 'Comment':"I have no friends, anyone up for the task?", 'CommentID':1, 'ParentCommentID':None},
+        {'username':'rory00', 'EventName':'Concert Buddy', 'Comment':"Anyone but big Eric please", 'CommentID':2, 'ParentCommentID':None},
+
+        {'username':'rory00', 'EventName':'workout friends', 'Comment':"Sounds good", 'CommentID':1, 'ParentCommentID':None},
+        {'username':'karisnimmo99', 'EventName':'workout friends', 'Comment':"Do you have more information?", 'CommentID':2, 'ParentCommentID':None},
+
+        {'username':'rory00', 'EventName':'Kai Dance School', 'Comment':"Sounds good", 'CommentID':1, 'ParentCommentID':None},
+        {'username':'karisnimmo99', 'EventName':'Kai Dance School', 'Comment':"Do you have more information?", 'CommentID':2, 'ParentCommentID':None},
+
+        {'username':'Steve5013', 'EventName':'FelixRave', 'Comment':"Back in my day we would bang on drums in a field!", 'CommentID':1, 'ParentCommentID':None},
+        {'username':'Lisa_UMG', 'EventName':'FelixRave', 'Comment':"Ok boomer", 'CommentID':2, 'ParentCommentID':1},
+
+        {'username':'Steve5013', 'EventName':'Architecture Class', 'Comment':"help I can't draw", 'CommentID':1, 'ParentCommentID':None},
+
+        {'username':'Steve5013', 'EventName':'Fix_on', 'Comment':"Finally a real class for real men like me!", 'CommentID':1, 'ParentCommentID':None},
+        {'username':'karisnimmo99', 'EventName':'Fix_on', 'Comment':"No problem, Steve.", 'CommentID':2, 'ParentCommentID':1},
+    ]
+
+    for c in comments:
+        User_obj = User.objects.get(username=c['username'])
+        Event_obj = Event.objects.get(EventName=c['EventName'])
+        if c['ParentCommentID'] != None:
+            parent_obj = Comment.objects.get(CommentID=c['ParentCommentID'], EventID=Event_obj)
+            comment = Comment.objects.create(UserID=User_obj,EventID=Event_obj,Comment=c['Comment'], CommentID=c['CommentID'], ParentCommentID=parent_obj)
+            print("Comment added: " + str(c['ParentCommentID']) + "->" + str(c['CommentID']) + " | '" + c['EventName'] + "' | '" + c['username'] + "'")
+        else:
+            comment = Comment.objects.create(UserID=User_obj,EventID=Event_obj,Comment=c['Comment'], CommentID=c['CommentID'])
+            print("Comment added: " + str(c['CommentID']) + " | '" + c['EventName'] + "' | '" + c['username'] + "'")
 
 if __name__ == '__main__':
     print('Initialising population script...')

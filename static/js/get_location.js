@@ -16,3 +16,9 @@ function submitPosition(position) {
     search_form.id_Longitude.value = position.coords.longitude;
     search_form.submit();
 }
+
+function submitSearchPositon() {
+    if (search_form.id_Latitude.value != "" && search_form.id_Longitude.value != "") {
+        search_form.submit();
+    }
+}

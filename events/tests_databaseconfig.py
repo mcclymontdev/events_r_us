@@ -15,11 +15,6 @@ FAILURE_FOOTER = f"{os.linesep}"
 
 
 class basicDatabaseConfig(TestCase):
-    """
-    Is your database configured as the book states?
-    These tests should pass if you haven't tinkered with the database configuration.
-    N.B. Some of the configuration values we could check are overridden by the testing framework -- so we leave them.
-    """
     def setUp(self):
         pass
     
