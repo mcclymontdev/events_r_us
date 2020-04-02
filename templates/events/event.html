@@ -66,7 +66,10 @@
 					{% if user.is_authenticated %}
 					<footer class="blockquote-footer">
 						<button type="button" name="button" class="reply-btn btn btn-outline-dark btn-sm">Reply</button>
-					</footer>
+            {% if user == comment.UserID %}
+            <a class="btn btn-danger btn-sm" href="{% url 'events:delete_comment' id=comment.EventID.EventID event_slug=comment.EventID.slug comment_id=comment.CommentID %}">Delete</a>
+            {% endif %}
+        	</footer>
 
 					<div class="replied-comments container mt-2" style="display:none">
 						<div class="from-group row">
@@ -97,6 +100,9 @@
 						{% if user.is_authenticated %}
 						<footer class="blockquote-footer">
 							<button type="button" name="button" class="reply-btn btn btn-outline-dark btn-sm">Reply</button>
+              {% if user == comment.UserID %}
+                <a class="btn btn-danger btn-sm" href="{% url 'events:delete_comment' id=reply.EventID.EventID event_slug=reply.EventID.slug comment_id=reply.CommentID %}">Delete</a>
+              {% endif %}
 						</footer>
 
 						<div class="replied-comments container mt-2" style="display:none">

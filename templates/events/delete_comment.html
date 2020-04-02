@@ -1,0 +1,28 @@
+{% extends 'events/base.html' %}
+{% load static %}
+
+{% block title_block %}
+    Comment deletion
+{% endblock %}
+
+{% block head_block %}
+{% endblock %}
+
+{% block body_block %}
+<div class="container manage-event-box">
+    {% if status == 1 %}
+    <div class="alert alert-success" role="alert">
+        comment.Comment on <span class="font-weight-bold">{{ comment.EventID.EventName }}</span> deleted successfully!
+    </div>
+    {% elif status == 2 %}
+    <div class="alert alert-danger" role="alert">
+        The specified comment does not exist or has already been deleted!
+    </div>
+    {% elif status == 3 %}
+    <div class="alert alert-danger" role="alert">
+        You do not have permission to delete that comment!
+    </div>
+    {% endif %}
+    <a type="button" href="{% url 'events:show_event' id=event.EventID event_slug=event.slug %}" class="btn btn-light">Back<a>
+</div>
+{% endblock %}
