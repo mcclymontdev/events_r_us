@@ -1,0 +1,17 @@
+{% extends 'events/base.html' %}
+{% load static %}
+
+{% block title_block %}
+    Invalid login
+{% endblock %}
+
+{% block head_block %}
+{% endblock %}
+
+{% block body_block %}
+<div class="container manage-event-box">
+    <div class="alert alert-danger" role="alert">
+        The username and/or password does not match an account.
+</div>
+<a type="button" href="{% url 'events:login' %}" class="btn btn-light">Return to login<a>
+{% endblock %}

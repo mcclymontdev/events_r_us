@@ -52,8 +52,7 @@ def login(request):
             else:
                 return HttpResponse("Your events account is disabled")
         else:
-            print(f"Invalid Login details: {username}, {password}")
-            return HttpResponse ("Invalid login credentials")
+            return render(request, 'events/invalid_login.html')
     else:
         return render(request, 'events/login.html')
 
@@ -146,7 +145,7 @@ def add_event(request):
                 eventType=form.cleaned_data["eventType"],
                 )
             event.save()
-            return redirect(reverse('events:index'))
+            return redirect('events:show_event', id=event.EventID, event_slug=event.slug)
         else:
             print(form.errors)
         
