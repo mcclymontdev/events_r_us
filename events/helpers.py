@@ -1,5 +1,6 @@
 from math import radians, cos, sin, asin, sqrt
 
+# Calculates the distance between two points.
 # https://stackoverflow.com/questions/4913349/haversine-formula-in-python-bearing-and-distance-between-two-gps-points
 def haversine(lat1, lon1, lat2, lon2):
 

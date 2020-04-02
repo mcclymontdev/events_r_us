@@ -13,8 +13,6 @@
       {% endfor %}
       {% for field in form.visible_fields %}
           {% if field.name == 'password' %}
-            <a class="btn btn-secondary" name="password" href="{% url 'events:change_password' %}">Change Password</a>
-            <br />
           {% else %}
               {{ field.errors }}
               {{ field.label }}<br />
@@ -22,8 +20,9 @@
               <br />
           {% endif %}
       {% endfor %}
-      <hr class="my-4">
       <button class="btn btn-primary" type="submit" name="submit">Save changes</button>
+      <hr class="my-4">
+      <a class="btn btn-secondary" name="password" href="{% url 'events:change_password' %}">Change Password</a>
   </form>
 </div>
 {% else %}

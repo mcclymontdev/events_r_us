@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django_registration.views import RegistrationView
 
-from events.forms import UserForm, EventForm, SearchForm, EventRatingsForm, ProfileUpdateForm, EditProfileForm, CommentForm
+from events.forms import EventForm, SearchForm, EventRatingsForm, EditProfileForm, CommentForm
 from events.helpers import haversine
 from .models import User, Event, Category, EventRatings, Comment
 
@@ -21,7 +21,6 @@ Simple view to return the index/home page.
 def index(request):
     form = SearchForm()
     return render(request, 'events/index.html', {'form' : form})
-
 
 """
 Simple view to return the about page.
@@ -324,7 +323,7 @@ def edit_profile(request):
         
         if form.is_valid():
             form.save()
-            return redirect(reverse('events:index'))
+            return redirect(reverse('events:profile'))
     else:
         form = EditProfileForm(instance=request.user)
         args={'form':form}
@@ -366,8 +365,5 @@ def delete_comment(request, id, event_slug, comment_id):
     
     except:
         context_dict['status'] = 2
-        
-    
 
     return render(request, 'events/delete_comment.html', context_dict)
-    
