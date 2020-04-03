@@ -1,5 +1,8 @@
 # Events 'R' Us
 
+This project was created and tested on Python 3.8.  
+Hosted version: https://mcclymontdev.pythonanywhere.com/
+
 ## Setup
 
 Using anaconda prompt:
@@ -27,4 +30,18 @@ Then go to:
 ```
 http://127.0.0.1:8000/
 ```
-You should see a success message if everything went well.
+
+## Populating the database
+To populate the database first make sure there is no existing sqlite3 DB file.  
+Make the initial migrations:
+```
+python manage.py makemigrations events
+```
+Apply the migrations:
+```
+python manage.py migrate
+```
+Then finally, run the population script:
+```
+python populate_events.py
+```
