@@ -1,5 +1,5 @@
 asgiref==3.2.3
-certifi==2019.11.28
+certifi==2022.12.7
 confusable-homoglyphs==3.2.0
 Django==3.0.3
 django-registration==3.1
